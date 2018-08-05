@@ -18,14 +18,27 @@ Here is a base roadmap :
 - [x] Implement a per chunk / per explosion blockSnapshots stucture
 - [x] Handle tick and consume healable objects
 - [x] Restore a blockSnapshot
-- [ ] Persist data
-- [ ] Create a dependency engine and sort blocks
-- [ ] Healing clock configuration
+- [x] Persist data
+- [ ] Create a dependency engine and sort blocks -> the hardest & longest step
+- [ ] Configurable healing clock
 
 When all theses task will be done, the code will be published.
 I've planned additionnal develpments :
 
-- [ ] Healing commands
-- [ ] Simulate block healing with chunk is not loaded
+- [ ] Configurable filters on explosion sources
+- [ ] Healing commands with permissions
+- [ ] Simulate block healing when chunk is not loaded
 
 Stay tuned :)
+
+## I want help to get a release faster !
+
+You are welcome !
+Just notify me by starring the project :)
+
+Once I've done the dependency engine, if at least one developper is interessed by helping me in alpha stage, I will post the source and a "Dependency Tracker" on github. This tracker will determinate what is done and what should be done before releasing.
+
+Dependencies consist to tell my engine, which condition require block to be placed.
+I didn't play Minecraft since 1.10, so all new changes are currently unknown for me.
+
+Once the alpha is done and plugin release is available, pull request still remain open to everyone wanted to contribute ;)
