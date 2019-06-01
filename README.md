@@ -1,6 +1,7 @@
 # SpongeCreeperHeal
 
-SpongeCreeperHeal is a *Work In Progress* project, source are not available yet due to current unstabilities.
+SpongeCreeperHeal is a *Work In Progress* project, source are now available but all feature are not implemented.
+Currently SpongeCreeperHeal is not suitable to be deploy on real servers.
 SpongeCreeperHeal is not only a porting of [ForgeCreeperHeal](https://github.com/RedRelay/ForgeCreeperHeal) from Forge to Sponge.
 
 It is a complete code refactoring to make it easier to understand and to contribute.
