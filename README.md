@@ -24,7 +24,7 @@ Here is a base roadmap :
 - [x] Handle tick and consume healable objects
 - [x] Restore a blockSnapshot
 - [x] Persist data
-- [ ] Create a dependency engine -> the hardest and main core feature
+- [x] Create a dependency engine -> the hardest and main core feature
 - [ ] Register all dependencies -> the longest step
 - [ ] Configurable healing clock
 
