@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+group 'fr.redrelay.spongecreeperheal'
+version '0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:7.0.0'
+    compile 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
+}
