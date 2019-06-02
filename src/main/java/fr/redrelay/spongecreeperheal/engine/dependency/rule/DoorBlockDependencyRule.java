@@ -1,10 +1,11 @@
 package fr.redrelay.spongecreeperheal.engine.dependency.rule;
 
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
-import fr.redrelay.spongecreeperheal.engine.dependency.factory.SupportedByBottomDependencyFactory;
+import fr.redrelay.spongecreeperheal.engine.dependency.factory.RelativePositionDependencyFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.property.block.GravityAffectedProperty;
+import org.spongepowered.api.util.Direction;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public class FallingBlockDependencyRule implements DependencyRule {
 
     @Override
     public void registerDependencies() {
-        final SupportedByBottomDependencyFactory supportedByBottomDependencyFactory = new SupportedByBottomDependencyFactory();
+        final RelativePositionDependencyFactory fallingBlockDependencyFactory = new RelativePositionDependencyFactory(Direction.DOWN);
 
         final Collection<BlockType> blocks = Sponge.getRegistry().getAllOf(BlockType.class);
         blocks.parallelStream()
@@ -24,7 +25,7 @@ public class FallingBlockDependencyRule implements DependencyRule {
                 })
                 .collect(Collectors.toList())
                 .forEach(block -> {
-                    DependencyEngine.getInstance().register(block, supportedByBottomDependencyFactory);
+                    DependencyEngine.getInstance().register(block, fallingBlockDependencyFactory);
                 });
     }
 }
