@@ -7,7 +7,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class DoorBlockDependencyRule implements DependencyRule {
 
@@ -18,7 +17,6 @@ public class DoorBlockDependencyRule implements DependencyRule {
         final Collection<BlockType> blocks = Sponge.getRegistry().getAllOf(BlockType.class);
         blocks.parallelStream()
                 .filter(block -> MinecraftAdapter.getInstance().isDoor(block))
-                .collect(Collectors.toList())
                 .forEach(block -> {
                     DependencyEngine.getInstance().register(block, supportedByBottomDependencyFactory);
                 });

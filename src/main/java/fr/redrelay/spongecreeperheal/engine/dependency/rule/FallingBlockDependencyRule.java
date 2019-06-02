@@ -8,7 +8,6 @@ import org.spongepowered.api.data.property.block.GravityAffectedProperty;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class FallingBlockDependencyRule implements DependencyRule {
 
@@ -22,7 +21,6 @@ public class FallingBlockDependencyRule implements DependencyRule {
                     final Optional<GravityAffectedProperty> opt = block.getProperty(GravityAffectedProperty.class);
                     return opt.isPresent() && opt.get().getValue();
                 })
-                .collect(Collectors.toList())
                 .forEach(block -> {
                     DependencyEngine.getInstance().register(block, supportedByBottomDependencyFactory);
                 });
