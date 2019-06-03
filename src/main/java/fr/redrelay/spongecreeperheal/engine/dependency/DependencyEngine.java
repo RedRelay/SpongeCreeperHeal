@@ -7,6 +7,7 @@ import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.chunk.component.HealableEntry;
+import fr.redrelay.spongecreeperheal.engine.dependency.rule.DependencyRule;
 import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -48,8 +49,13 @@ public class DependencyEngine {
         return Optional.ofNullable(map.get(block));
     }
 
+    public void register(DependencyRule rule) {
+        logger.info("Register dependency rule \"{}\"",rule.getName());
+        rule.registerDependencies();
+    }
+
     public void register(BlockType block, DependencyFactory factory) {
-        logger.info("Register dependency factory \""+factory.getClass().getName()+"\" for block \""+block.getName()+"\"");
+        logger.info("Register dependency factory \"{}\" for block \"{}\"",factory.getClass().getName(), block.getName());
         map.put(block, factory);
     }
 
