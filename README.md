@@ -26,7 +26,7 @@ Here is a base roadmap :
 - [x] Restore a blockSnapshot
 - [x] Persist data
 - [x] Create a dependency engine -> the hardest and main core feature
-- [ ] Register all dependencies -> the longest step
+- [ ] Register all dependencies -> the longest step (tracker : https://github.com/RedRelay/SpongeCreeperHeal/issues/4)
 - [ ] Configurable healing clock
 
 When all theses task will be done, the code will be published.
@@ -42,10 +42,6 @@ Stay tuned :)
 
 You are welcome !
 Just notify me by starring the project :)
+Pull request is open !
 
-Once I've done the dependency engine, if at least one developper is interessed by helping me in alpha stage, I will post the source and a "Dependency Tracker" on github. This tracker will determinate what is done and what should be done before releasing.
-
-Dependencies consist to tell my engine, which condition require block to be placed.
-I didn't play Minecraft since 1.10, so all new changes are currently unknown for me.
-
-Once the alpha is done and plugin release is available, pull request still remain open to everyone wanted to contribute ;)
+Here is the dependency tracker : https://github.com/RedRelay/SpongeCreeperHeal/issues/4
