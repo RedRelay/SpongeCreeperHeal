@@ -9,7 +9,7 @@ import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngineListeners
 import fr.redrelay.spongecreeperheal.handler.ExplosionHandler;
 import fr.redrelay.spongecreeperheal.storage.world.WorldStoragesEventListeners;
 import fr.redrelay.spongecreeperheal.task.HealTask;
-import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,8 @@ import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Plugin(id = "spongecreeperheal", name = "Sponge Creeper Heal", version = "0.0")
@@ -37,9 +38,13 @@ public class SpongeCreeperHeal {
     @Inject
     private Logger logger;
 
-    //@Inject
+    @Inject
     @DefaultConfig(sharedRoot = true)
-    private ConfigurationLoader configurationLoader;
+    private File defaultConfig;
+
+    @Inject
+    @DefaultConfig(sharedRoot = true)
+    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader;
 
     @Listener
     public void onGamePreInit(GamePreInitializationEvent e) {
@@ -78,6 +83,15 @@ public class SpongeCreeperHeal {
     public static Optional<ConfigurationLoader> getConfig() {
         final Optional<SpongeCreeperHeal> instance = getInstance();
         if(instance.isPresent()) {
+
+            if(instance.get().defaultConfig != null) {
+                try {
+                    instance.get().defaultConfig.createNewFile();
+                }catch(IOException e) {
+                    instance.get().logger.error("Unable to create SpongeCreeperHeal default config file at {}", instance.get().defaultConfig.getAbsolutePath());
+                }
+            }
+
             final Optional<ConfigurationLoader> config = Optional.ofNullable(instance.get().configurationLoader);
             if(!config.isPresent()) {
                 instance.get().logger.error("Unable to load SpongeCreeperHeal config");
