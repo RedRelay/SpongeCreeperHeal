@@ -40,8 +40,6 @@ public class DependencyEngineListeners {
             });
         });
 
-        //final File dependencyTrackerFile = new File("spongecreeperheal_dependency_tracker.md");
-
     }
 
     public static DependencyEngineListeners getInstance() { return INSTANCE; }
