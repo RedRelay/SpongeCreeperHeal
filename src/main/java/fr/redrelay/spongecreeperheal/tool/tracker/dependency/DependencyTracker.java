@@ -83,46 +83,29 @@ public class DependencyTracker {
     public void createMarkdown(File file) throws IOException {
         final PrintWriter writer = new PrintWriter(new FileWriter(file));
         try {
-            this.items.stream().forEachOrdered(item -> {
-                Optional<String> optColor = Optional.empty();
-                Optional<Boolean> optIsChecked = Optional.empty();
-
-                switch(item.getStatus()) {
-                    case DEPENDENCY_REGISTERED:
-                        optColor = Optional.of("green");
-                        optIsChecked = Optional.of(true);
-                        break;
-                    case DEPENDENCY_REGISTRED_WITH_NO_MATCH :
-                        optColor = Optional.of("orange");
-                        optIsChecked = Optional.of(true);
-                        break;
-                    case NO_DEPENDENCY_REGISTERED :
-                        optColor = Optional.of("red");
-                        optIsChecked = Optional.of(false);
-                        break;
-                    default : break;
-                }
+            this.items.stream().sorted().forEachOrdered(item -> {
 
                 final StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append("* [");
-                if(optIsChecked.isPresent() && optIsChecked.get().booleanValue()) {
+                if(item.getStatus().isDependencyImplemented()) {
                     stringBuilder.append('x');
                 }else {
                     stringBuilder.append(' ');
                 }
                 stringBuilder.append("] ");
 
-                optColor.ifPresent(color -> {
+                item.getStatus().getColor().ifPresent(color -> {
                     stringBuilder.append("<span style=\"color:").append(color).append(";\">");
                 });
 
                 stringBuilder.append(item.getBlock().getName());
 
-                if(item.getDependencyFactory().isPresent()) {
-                    stringBuilder.append(" : ").append(item.getDependencyFactory().get().getSource().getName());
-                }
-                optColor.ifPresent(color -> {
+                item.getDependencyFactory().ifPresent(factory -> {
+                    stringBuilder.append(" : ").append(factory.getSource().getName());
+                });
+
+                item.getStatus().getColor().ifPresent(color -> {
                     stringBuilder.append("</span>");
                 });
 

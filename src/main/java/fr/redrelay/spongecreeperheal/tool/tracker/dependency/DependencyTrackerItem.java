@@ -6,12 +6,39 @@ import org.spongepowered.api.block.BlockType;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class DependencyTrackerItem {
+public final class DependencyTrackerItem implements Comparable<DependencyTrackerItem>{
+
+    @Override
+    public int compareTo(DependencyTrackerItem o) {
+        return this.getStatus().priority - o.getStatus().priority;
+    }
 
     public enum Status {
-        DEPENDENCY_REGISTERED,
-        DEPENDENCY_REGISTRED_WITH_NO_MATCH,
-        NO_DEPENDENCY_REGISTERED
+        DEPENDENCY_REGISTERED("green", true,1),
+        DEPENDENCY_REGISTRED_WITH_NO_MATCH("orange", true, 2),
+        NO_DEPENDENCY_REGISTERED("red", false, 3);
+
+        private final String color;
+        protected final int priority;
+        private final boolean isDependencyImplemented;
+
+        Status(String color, boolean isDependencyImplemented, int priority) {
+            this.color = color;
+            this.isDependencyImplemented = isDependencyImplemented;
+            this.priority = priority;
+        }
+
+        Status(boolean isDependencyImplemented, int priority) {
+            this(null, isDependencyImplemented, priority);
+        }
+
+        public Optional<String> getColor() {
+            return Optional.ofNullable(color);
+        }
+
+        public boolean isDependencyImplemented() {
+            return isDependencyImplemented;
+        }
     }
 
     private final BlockType block;
@@ -48,5 +75,4 @@ public final class DependencyTrackerItem {
     public int hashCode() {
         return Objects.hash(block);
     }
-
 }
