@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.engine.dependency;
 
-import fr.redrelay.adapter.MinecraftAdapter;
+import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.DownLayedDependencyRule;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
