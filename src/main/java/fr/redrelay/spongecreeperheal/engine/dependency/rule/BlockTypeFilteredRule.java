@@ -13,7 +13,9 @@ import java.util.Map;
 
 public abstract class BlockTypeFilteredRule implements DependencyRule {
 
-    private final DependencyFactory<BlockSnapshot, Vector3i, Map<Vector3i, BlockState>> dependencyFactory;
+    protected DependencyFactory dependencyFactory;
+
+    protected BlockTypeFilteredRule() {}
 
     public BlockTypeFilteredRule(DependencyFactory<BlockSnapshot, Vector3i, Map<Vector3i, BlockState>> dependencyFactory) {
         this.dependencyFactory = dependencyFactory;

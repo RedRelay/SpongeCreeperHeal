@@ -59,6 +59,10 @@ public class DependencyEngine {
         map.put(block, factory);
     }
 
+    public Map<BlockType, DependencyFactory> getDependencyMap() {
+        return Collections.unmodifiableMap(map);
+    }
+
     /**
      * Internally used and necessary to compile.
      * It helps compiler to get type inference

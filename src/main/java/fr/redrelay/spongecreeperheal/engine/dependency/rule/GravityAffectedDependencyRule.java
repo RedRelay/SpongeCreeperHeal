@@ -9,11 +9,12 @@ import java.util.Optional;
 public class GravityAffectedDependencyRule extends BlockTypeFilteredRule {
 
     public GravityAffectedDependencyRule() {
-        super(DownLayedDependencyFactory.getInstance());
+        super();
+        this.dependencyFactory = new DownLayedDependencyFactory(this);
     }
 
     @Override
-    protected boolean matches(BlockType block) {
+    public boolean matches(BlockType block) {
         final Optional<GravityAffectedProperty> opt = block.getProperty(GravityAffectedProperty.class);
         return opt.isPresent() && opt.get().getValue();
     }

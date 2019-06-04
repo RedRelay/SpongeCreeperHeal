@@ -9,7 +9,8 @@ public class DownLayedDependencyRule extends BlockTypeFilteredRule {
     private final Class<? extends Block> blockClass;
 
     public DownLayedDependencyRule(Class<? extends Block> blockClass) {
-        super(DownLayedDependencyFactory.getInstance());
+        super();
+        this.dependencyFactory = new DownLayedDependencyFactory(this);
         this.blockClass = blockClass;
     }
 
