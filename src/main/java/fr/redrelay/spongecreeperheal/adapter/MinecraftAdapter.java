@@ -1,4 +1,4 @@
-package fr.redrelay.adapter;
+package fr.redrelay.spongecreeperheal.adapter;
 
 import net.minecraft.block.*;
 

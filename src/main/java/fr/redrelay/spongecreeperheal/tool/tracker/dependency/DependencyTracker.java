@@ -4,6 +4,8 @@ import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
@@ -19,10 +21,11 @@ import java.util.*;
  * Try to locate all blocks which have at least one dependency
  * By looking for implementation of method "canPlaceBlockAt" in child class of Block
  * When it has "canPlaceBlockAt" method, it means there are specifics rules
- * Except when "modelBlock" field exist because it is supposed to be managed by this modelBlock.
  *
  * Note that block with GravityAffected property will always have dependency because they fall
  * DragonEgg seems to be affected by gravity but does not have the property : https://github.com/SpongePowered/SpongeCommon/issues/2280
+ *
+ *
  * */
 public class DependencyTracker {
 
@@ -40,27 +43,38 @@ public class DependencyTracker {
             final Optional<DependencyFactory> factory = Optional.ofNullable(dependencyMap.get(blockType));
 
             Class<?> clazz = blockType.getClass();
-            boolean hasCanPlaceBlockAtMethod = false;
-            boolean hasBlockModel = false;
             boolean hasDependencies = gravityAffectedDependencyRule.matches(blockType);
             while(!hasDependencies && clazz != null && !clazz.equals(Block.class)) {
 
-                try {
-                    clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
-                    hasCanPlaceBlockAtMethod = true;
-                } catch (NoSuchMethodException e) {
-                    hasCanPlaceBlockAtMethod = false;
+                /*
+                For BlockStairs : modelBlock is supposed to manage dependency
+                 */
+                if(clazz.equals(BlockStairs.class)) {
+                    hasDependencies = false;
+                    // TODO : Use Mixin : modelBlock is private
+                    //clazz = ((BlockStairs) blockType).modelBlock.getClass();
+                    break;
                 }
 
                 try {
-                    hasBlockModel = clazz.getDeclaredField("modelBlock").getType().equals(Block.class);;
-                }catch(NoSuchFieldException e) {
-                    hasBlockModel = false;
+                    clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
+                    hasDependencies = true;
+                } catch (NoSuchMethodException e) {
+                    hasDependencies = false;
+                }
+
+                /*
+                For BlockFenceGate : they cannot be placed on non solid block by default
+                But this is a valid position, if you place a solid block then place a fence gate
+                then replace the solid block by a non solid so the fence gate stay
+                 */
+                if(clazz.equals(BlockFenceGate.class)) {
+                    hasDependencies = false;
+                    break;
                 }
 
                 clazz = clazz.getSuperclass();
 
-                hasDependencies = hasCanPlaceBlockAtMethod && !hasBlockModel;
             }
 
             if(hasDependencies) {
