@@ -4,6 +4,7 @@ import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEndRod;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.util.math.BlockPos;
@@ -46,13 +47,22 @@ public class DependencyTracker {
             boolean hasDependencies = gravityAffectedDependencyRule.matches(blockType);
             while(!hasDependencies && clazz != null && !clazz.equals(Block.class)) {
 
-                /*
-                For BlockStairs : modelBlock is supposed to manage dependency
-                 */
+                //BlockEndRod implements canPlaceBlockAt for ... nothing :|
+                //Always return true like parent block Block.class
+                if(clazz.equals(BlockEndRod.class)) {
+                    break;
+                }
+                //For BlockStairs : modelBlock is supposed to manage dependency
                 if(clazz.equals(BlockStairs.class)) {
-                    hasDependencies = false;
                     // TODO : Use Mixin : modelBlock is private
                     //clazz = ((BlockStairs) blockType).modelBlock.getClass();
+                    break;
+                }
+
+                //For BlockFenceGate : they cannot be placed on non solid block by default
+                //But this is a valid position, if you place a solid block then place a fence gate
+                //then replace the solid block by a non solid so the fence gate stay
+                if(clazz.equals(BlockFenceGate.class)) {
                     break;
                 }
 
@@ -60,21 +70,8 @@ public class DependencyTracker {
                     clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
                     hasDependencies = true;
                 } catch (NoSuchMethodException e) {
-                    hasDependencies = false;
+                    clazz = clazz.getSuperclass();
                 }
-
-                /*
-                For BlockFenceGate : they cannot be placed on non solid block by default
-                But this is a valid position, if you place a solid block then place a fence gate
-                then replace the solid block by a non solid so the fence gate stay
-                 */
-                if(clazz.equals(BlockFenceGate.class)) {
-                    hasDependencies = false;
-                    break;
-                }
-
-                clazz = clazz.getSuperclass();
-
             }
 
             if(hasDependencies) {
