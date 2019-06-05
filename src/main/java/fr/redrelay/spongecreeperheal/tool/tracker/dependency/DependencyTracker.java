@@ -3,10 +3,7 @@ package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEndRod;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
@@ -63,6 +60,13 @@ public class DependencyTracker {
                 //But this is a valid position, if you place a solid block then place a fence gate
                 //then replace the solid block by a non solid so the fence gate stay
                 if(clazz.equals(BlockFenceGate.class)) {
+                    break;
+                }
+
+                //For BlockChest : only double chest is checked, we can ignore it when we restore
+                //Moreover I don't have any simple clue of fallback in case canBePlaced
+                // return false when healed
+                if(clazz.equals(BlockChest.class)) {
                     break;
                 }
 
