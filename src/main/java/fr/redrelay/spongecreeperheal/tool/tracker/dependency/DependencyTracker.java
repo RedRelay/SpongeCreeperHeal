@@ -4,6 +4,7 @@ import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
 import net.minecraft.block.*;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.api.Sponge;
@@ -17,7 +18,7 @@ import java.util.*;
 
 /**
  * Try to locate all blocks which have at least one dependency
- * By looking for implementation of method "canPlaceBlockAt" in child class of Block
+ * By looking for implementation of method "canPlaceBlockAt" or "canPlaceBlockOnSide" in child class of Block
  * When it has "canPlaceBlockAt" method, it means there are specifics rules
  *
  * Note that block with GravityAffected property will always have dependency because they fall
@@ -44,6 +45,12 @@ public class DependencyTracker {
             boolean hasDependencies = gravityAffectedDependencyRule.matches(blockType);
             while(!hasDependencies && clazz != null && !clazz.equals(Block.class)) {
 
+                //BlockCocoa implements a specific rule named "canBlockStay"
+                if(clazz.equals(BlockCocoa.class)) {
+                    hasDependencies = true;
+                    break;
+                }
+
                 //BlockEndRod implements canPlaceBlockAt for ... nothing :|
                 //Always return true like parent block Block.class
                 if(clazz.equals(BlockEndRod.class)) {
@@ -56,10 +63,10 @@ public class DependencyTracker {
                     break;
                 }
 
-                //For BlockFenceGate : they cannot be placed on non solid block by default
-                //But this is a valid position, if you place a solid block then place a fence gate
+                //For BlockFenceGate and BlockTrapDoor: they cannot be placed on non solid block by default
+                //But this is a valid position, if you place a solid block then place a fence gate or a trap door
                 //then replace the solid block by a non solid so the fence gate stay
-                if(clazz.equals(BlockFenceGate.class)) {
+                if(clazz.equals(BlockFenceGate.class) || clazz.equals(BlockTrapDoor.class)) {
                     break;
                 }
 
@@ -74,7 +81,13 @@ public class DependencyTracker {
                     clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
                     hasDependencies = true;
                 } catch (NoSuchMethodException e) {
-                    clazz = clazz.getSuperclass();
+                    try {
+                        clazz.getDeclaredMethod("canPlaceBlockOnSide", World.class, BlockPos.class, EnumFacing.class);
+                        hasDependencies = true;
+                    }catch (NoSuchMethodException e2) {
+                        clazz = clazz.getSuperclass();
+                    }
+
                 }
             }
 
