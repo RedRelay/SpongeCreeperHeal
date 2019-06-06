@@ -9,16 +9,6 @@ import java.util.Collection;
 
 public abstract class BlockTypeFilteredRule implements DependencyRule {
 
-    //protected DependencyFactory dependencyFactory;
-
-    protected BlockTypeFilteredRule() {}
-
-    /*
-    public BlockTypeFilteredRule(DependencyFactory<BlockSnapshot, Vector3i, Map<Vector3i, BlockState>> dependencyFactory) {
-        this.dependencyFactory = dependencyFactory;
-    }
-    */
-
     @Override
     public void registerDependencies() {
         final Collection<BlockType> blocks = Sponge.getRegistry().getAllOf(BlockType.class);
