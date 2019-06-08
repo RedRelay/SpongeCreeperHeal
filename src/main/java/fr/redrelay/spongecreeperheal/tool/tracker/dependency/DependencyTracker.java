@@ -3,7 +3,7 @@ package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,6 +28,9 @@ import java.util.*;
  * */
 public class DependencyTracker {
 
+    private static final GravityAffectedDependencyRule gravityAffectedDependencyRule = new GravityAffectedDependencyRule();
+    private static final DependencyTrackerAdapter dependencyAdapter = new DependencyTrackerAdapter();
+
     private final Set<DependencyTrackerItem> items;
 
     public DependencyTracker() {
@@ -35,63 +38,11 @@ public class DependencyTracker {
         final Map<BlockType, DependencyFactory> dependencyMap = DependencyEngine.getInstance().getDependencyMap();
         final Set<DependencyTrackerItem> tracker = new HashSet<>();
 
-        final GravityAffectedDependencyRule gravityAffectedDependencyRule = new GravityAffectedDependencyRule();
-
         allBlocks.forEach(blockType -> {
 
             final Optional<DependencyFactory> factory = Optional.ofNullable(dependencyMap.get(blockType));
 
-            Class<?> clazz = blockType.getClass();
-            boolean hasDependencies = gravityAffectedDependencyRule.matches(blockType);
-            while(!hasDependencies && clazz != null && !clazz.equals(Block.class)) {
-
-                //BlockCocoa implements a specific rule named "canBlockStay"
-                if(clazz.equals(BlockCocoa.class)) {
-                    hasDependencies = true;
-                    break;
-                }
-
-                //BlockEndRod implements canPlaceBlockAt for ... nothing :|
-                //Always return true like parent block Block.class
-                if(clazz.equals(BlockEndRod.class)) {
-                    break;
-                }
-                //For BlockStairs : modelBlock is supposed to manage dependency
-                if(clazz.equals(BlockStairs.class)) {
-                    // TODO : Use Mixin : modelBlock is private
-                    //clazz = ((BlockStairs) blockType).modelBlock.getClass();
-                    break;
-                }
-
-                //For BlockFenceGate and BlockTrapDoor: they cannot be placed on non solid block by default
-                //But this is a valid position, if you place a solid block then place a fence gate or a trap door
-                //then replace the solid block by a non solid so the fence gate stay
-                if(clazz.equals(BlockFenceGate.class) || clazz.equals(BlockTrapDoor.class)) {
-                    break;
-                }
-
-                //For BlockChest : only double chest is checked, we can ignore it when we restore
-                //Moreover I don't have any simple clue of fallback in case canBePlaced
-                // return false when healed
-                if(clazz.equals(BlockChest.class)) {
-                    break;
-                }
-
-                try {
-                    clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
-                    hasDependencies = true;
-                } catch (NoSuchMethodException e) {
-                    try {
-                        clazz.getDeclaredMethod("canPlaceBlockOnSide", World.class, BlockPos.class, EnumFacing.class);
-                        hasDependencies = true;
-                    }catch (NoSuchMethodException e2) {
-                        clazz = clazz.getSuperclass();
-                    }
-
-                }
-            }
-
-            if(hasDependencies) {
+            if(DependencyTracker.hasDependencies(blockType)) {
 
                 if(factory.isPresent()) {
                     tracker.add(new DependencyTrackerItem(blockType, factory, DependencyTrackerItem.Status.DEPENDENCY_REGISTERED));
@@ -106,6 +57,41 @@ public class DependencyTracker {
         });
 
         this.items = Collections.unmodifiableSet(tracker);
+    }
+
+    protected static boolean hasDependencies(Class<?> clazz) {
+        try {
+            clazz.getDeclaredMethod("canPlaceBlockAt", World.class, BlockPos.class);
+            return true;
+        } catch (ReflectiveOperationException e) {
+            try {
+                clazz.getDeclaredMethod("canPlaceBlockOnSide", World.class, BlockPos.class, EnumFacing.class);
+                return true;
+            }catch (ReflectiveOperationException e2) {
+                return false;
+            }
+        }
+    }
+
+    protected static boolean hasDependencies(BlockType blockType) {
+
+        Class<?> clazz = blockType.getClass();
+        boolean hasDependencies = gravityAffectedDependencyRule.matches(blockType);
+        while(!hasDependencies && !clazz.equals(Block.class)) {
+
+            final Optional<Boolean> forcedRule = dependencyAdapter.hasDependency(blockType, clazz);
+
+            if(forcedRule.isPresent()) {
+                return forcedRule.get();
+            }
+
+            hasDependencies = DependencyTracker.hasDependencies(clazz);
+            if(!hasDependencies) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+
+        return hasDependencies;
     }
 
     public void createMarkdown(File file) throws IOException {
