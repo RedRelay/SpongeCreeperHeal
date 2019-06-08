@@ -25,8 +25,9 @@ Here is a base roadmap :
 - [x] Handle tick and consume healable objects
 - [x] Restore a blockSnapshot
 - [x] Persist data
-- [x] Create a dependency engine -> the hardest and main core feature
+- [x] Create a dependency engine
 - [ ] Register all dependencies -> the longest step (tracker : https://github.com/RedRelay/SpongeCreeperHeal/issues/4)
+- [ ] Support multi blocks
 - [ ] Configurable healing clock
 
 When all theses task will be done, the code will be published.
