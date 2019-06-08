@@ -1,9 +1,9 @@
 package fr.redrelay.dependency.model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class BasicDependencyModel<T> implements DependencyModel<T> {
 
@@ -14,8 +14,7 @@ public class BasicDependencyModel<T> implements DependencyModel<T> {
     }
 
     private BasicDependencyModel(T dependency) {
-        this.dependencies = new TreeSet<>();
-        this.dependencies.add(dependency);
+        this.dependencies = new HashSet<>(Arrays.asList(dependency));
     }
 
     @Override

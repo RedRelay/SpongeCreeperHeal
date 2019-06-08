@@ -75,7 +75,7 @@ public class DependencyEngine {
         if(optFactory.isPresent()) {
             final Optional<DependencyModel<Vector3i>> optDependencyModel = optFactory.get().build(entry, indexedBlockStates);
             if(optDependencyModel.isPresent()) {
-                return new DependencyNode<Vector3i>(entry.getPosition(), optDependencyModel.get());
+                return new DependencyNode<>(entry.getPosition(), optDependencyModel.get());
             }
 
         }

@@ -2,9 +2,7 @@ package fr.redrelay.spongecreeperheal.engine.dependency;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.DownLayedDependencyRule;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.FacingDependencyRule;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
+import fr.redrelay.spongecreeperheal.engine.dependency.rule.*;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -24,6 +22,8 @@ public class DependencyEngineListeners {
         MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DownLayedDependencyRule(blockClass)));
         MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new FacingDependencyRule(blockClass, true)));
         MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new FacingDependencyRule(blockClass)));
+        dependencyEngine.register(new ChorusPlantDependencyRule());
+        dependencyEngine.register(new ChorusFlowerDependencyRule());
 
         SpongeCreeperHeal.getConfig().ifPresent(config -> {
             Optional<String> optFilePath = Optional.empty();
