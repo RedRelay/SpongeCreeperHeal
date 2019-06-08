@@ -32,7 +32,10 @@ public class DependencyTrackerAdapter {
             //For BlockChest : only double chest is checked, we can ignore it when we restore
             //Moreover I don't have any simple clue of fallback in case canBePlaced
             // return false when healed
-            BlockChest.class
+            BlockChest.class,
+            //Technical Blocks
+            BlockPistonExtension.class,
+            BlockPistonMoving.class
 
     )));
 
