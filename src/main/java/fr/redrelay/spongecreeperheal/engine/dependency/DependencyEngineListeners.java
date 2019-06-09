@@ -25,6 +25,7 @@ public class DependencyEngineListeners {
         dependencyEngine.register(new VineDependencyRule());
         dependencyEngine.register(new ChorusPlantDependencyRule());
         dependencyEngine.register(new ChorusFlowerDependencyRule());
+        dependencyEngine.register(new FireDependencyRule());
 
         SpongeCreeperHeal.getConfig().ifPresent(config -> {
             Optional<String> optFilePath = Optional.empty();
