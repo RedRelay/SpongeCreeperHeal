@@ -28,7 +28,7 @@ public class HealableChunk implements DataSerializable {
 
     private HealableChunk(Collection<HealableExplosion> explosions) {
         if(explosions.isEmpty()) {
-            throw new RuntimeException("HealableChunk must contains at least one explosion to heal");
+            throw new RuntimeException(HealableChunk.class.getSimpleName()+" must contains at least one explosion to heal");
         }
         this.explosions.addAll(explosions);
     }
@@ -83,7 +83,7 @@ public class HealableChunk implements DataSerializable {
         protected Optional<HealableChunk> buildContent(DataView container) throws InvalidDataException {
             final Optional<List<HealableExplosion>> opt = container.getSerializableList(Keys.EXPLOSION, HealableExplosion.class);
             if(!opt.isPresent()) {
-                logger.error("Found a HealableChunk data without explosions ... skipping.");
+                logger.error("Found a "+HealableChunk.class.getSimpleName()+" data without explosions ... skipping.");
                 return Optional.empty();
             }
             return Optional.of(new HealableChunk(opt.get()));
