@@ -29,20 +29,28 @@ public class ExplosionHandler {
                 .map( worldLocation -> {
                     //Save all block data in snapshot, necessary to restore the block later
                     final BlockSnapshot blockSnapshot = worldLocation.createSnapshot();
-                    //Remove block to prevent item drop
-                    worldLocation.setBlockType(BlockTypes.AIR, BlockChangeFlags.NONE);
 
                     return blockSnapshot;
 
                 }).collect(Collectors.toList());
 
         final LinkedList<HealableEntry> healables = DependencyEngine.getInstance().build(blocks);
+
+        this.removeBlocks(blocks);
+
         //TODO : ScheduleService
         healables.parallelStream()
                 .collect(Collectors.groupingBy(healableEntry -> healableEntry.getBlockSnapshot().getLocation().get().getChunkPosition(), Collectors.toCollection(LinkedList::new)))
                 .forEach((chunkPos, healableEntries) -> {
                     HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(healableEntries));
                 });
+    }
+
+    private void removeBlocks(List<BlockSnapshot> blocks) {
+        //Remove block to prevent item drop
+        blocks.forEach(block -> block.getLocation().ifPresent(world -> world.setBlockType(BlockTypes.AIR, BlockChangeFlags.NONE)));
+        //Update block
+        blocks.forEach(block -> block.getLocation().ifPresent(world -> world.setBlockType(BlockTypes.AIR)));
     }
 
 
