@@ -9,7 +9,7 @@ public abstract class ComplexDependencyModel<T> implements DependencyModel<T>{
 
     public static class NotEnoughtOperandException extends RuntimeException {
         public NotEnoughtOperandException(DependencyModel[] operands) {
-            super("Unable to create ComplexeDependencyModel without at least 2 operands, got "+operands.length);
+            super("Unable to create "+ComplexDependencyModel.class.getSimpleName()+" without at least 2 operands, got "+operands.length);
         }
     }
 
