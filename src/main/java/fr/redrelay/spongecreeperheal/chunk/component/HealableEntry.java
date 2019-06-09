@@ -69,7 +69,7 @@ public class HealableEntry implements DataSerializable {
         protected Optional<HealableEntry> buildContent(DataView data) throws InvalidDataException {
             final Optional<BlockSnapshot> optBlockSnapshot = data.getSerializable(Keys.BLOCK_SNAPSHOT, BlockSnapshot.class);
             if(!optBlockSnapshot.isPresent()) {
-                SpongeCreeperHeal.getLogger().error("Found HealableEntry data without BlockSnapshot ... skipping.");
+                SpongeCreeperHeal.getLogger().error("Found "+HealableEntry.class.getSimpleName()+" data without "+BlockSnapshot.class.getSimpleName()+" ... skipping.");
                 return Optional.empty();
             }
             final int remainingTime = data.getInt(Keys.REMAINING_TIME).orElseGet(() -> {
@@ -81,7 +81,7 @@ public class HealableEntry implements DataSerializable {
             try {
                 entry.setRemainingTime(remainingTime);
             }catch(IllegalArgumentException err) {
-                SpongeCreeperHeal.getLogger().error("Error occured while deserialize HealableEntry : "+err.getMessage()+" ... set default to 1");
+                SpongeCreeperHeal.getLogger().error("Error occured while deserialize "+HealableEntry.class.getSimpleName()+" : "+err.getMessage()+" ... set default to 1");
                 entry.setRemainingTime(1);
             }
 
