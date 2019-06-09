@@ -33,9 +33,7 @@ public class HealableChunksEventListeners {
 
     @Listener
     public void onServerStop(GameStoppingServerEvent e) {
-        HealableChunks.getInstance().getRawMap().entrySet().forEach(entry -> {
-            saveChunk(entry.getValue());
-        });
+        HealableChunks.getInstance().getRawMap().forEach((key, value) -> saveChunk(value));
         HealableChunks.getInstance().clear();
     }
 
