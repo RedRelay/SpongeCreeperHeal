@@ -14,9 +14,7 @@ public abstract class BlockTypeFilteredRule implements DependencyRule {
         final Collection<BlockType> blocks = Sponge.getRegistry().getAllOf(BlockType.class);
         blocks.parallelStream()
                 .filter(this::matches)
-                .forEach(block -> {
-                    DependencyEngine.getInstance().register(block, getFactory(block));
-                });
+                .forEach(block -> DependencyEngine.getInstance().register(block, getFactory(block)));
     }
 
     protected abstract boolean matches(BlockType block);
