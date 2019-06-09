@@ -3,8 +3,8 @@ package fr.redrelay.spongecreeperheal;
 import com.google.inject.Inject;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunk;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunksEventListeners;
+import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.chunk.component.HealableEntry;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableExplosion;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngineListeners;
 import fr.redrelay.spongecreeperheal.handler.ExplosionHandler;
 import fr.redrelay.spongecreeperheal.storage.world.WorldStoragesEventListeners;
@@ -51,7 +51,7 @@ public class SpongeCreeperHeal {
         final DataManager dataManager = Sponge.getDataManager();
 
         dataManager.registerBuilder(HealableChunk.class, new HealableChunk.HealableChunkBuilder());
-        dataManager.registerBuilder(HealableExplosion.class, new HealableExplosion.HealableExplosionBuilder());
+        dataManager.registerBuilder(ExplosionSnapshot.class, new ExplosionSnapshot.HealableExplosionBuilder());
         dataManager.registerBuilder(HealableEntry.class, new HealableEntry.HealableEntryBuilder());
     }
 

@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableExplosion;
+import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.world.Chunk;
 
@@ -33,13 +33,13 @@ public class HealableChunks {
 
 
     /**
-     * Adds a new HealableExplosion to a Chunk
+     * Adds a new ExplosionSnapshot to a Chunk
      * If Chunk already contains a HealableChunk it is added to it
      * Else it is created then registered
      * @param chunk
      * @param explosion
      */
-    public void add(Chunk chunk, HealableExplosion explosion) {
+    public void add(Chunk chunk, ExplosionSnapshot explosion) {
         final Optional<HealableChunk> healableChunk = this.get(chunk.getUniqueId());
         if(healableChunk.isPresent()) {
             logger.debug("Adding a new explosion to an existing {} {}",HealableChunk.class.getSimpleName(), healableChunk.get().getChunkPos().toString());

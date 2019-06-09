@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.chunk;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableExplosion;
+import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * HealableChunk contains a list of HealableExplosion to be restored
+ * HealableChunk contains a list of ExplosionSnapshot to be restored
  * It represents all explosions for a chunk
  */
 public class HealableChunk implements DataSerializable {
@@ -26,18 +26,18 @@ public class HealableChunk implements DataSerializable {
 
     private static Logger logger = SpongeCreeperHeal.getLogger();
 
-    private final List<HealableExplosion> explosions = new LinkedList<>();
+    private final List<ExplosionSnapshot> explosions = new LinkedList<>();
     protected String worldName;
     protected Vector3i chunkPos;
 
-    private HealableChunk(Collection<HealableExplosion> explosions) {
+    private HealableChunk(Collection<ExplosionSnapshot> explosions) {
         if(explosions.isEmpty()) {
             throw new RuntimeException(HealableChunk.class.getSimpleName()+" must contains at least one explosion to heal");
         }
         this.explosions.addAll(explosions);
     }
 
-    protected HealableChunk(String worldName, Vector3i chunkPos, HealableExplosion explosion) {
+    protected HealableChunk(String worldName, Vector3i chunkPos, ExplosionSnapshot explosion) {
         this.worldName = worldName;
         this.chunkPos = chunkPos;
         this.explosions.add(explosion);
@@ -69,12 +69,12 @@ public class HealableChunk implements DataSerializable {
         return worldName != null && chunkPos != null;
     }
 
-    public List<HealableExplosion> getExplosions() {
+    public List<ExplosionSnapshot> getExplosions() {
         return explosions;
     }
 
     public void tick() {
-        explosions.forEach(HealableExplosion::tick);
+        explosions.forEach(ExplosionSnapshot::tick);
         explosions.removeAll(explosions.parallelStream().filter(e -> e.getEntries().isEmpty()).collect(Collectors.toList()));
     }
 
@@ -102,7 +102,7 @@ public class HealableChunk implements DataSerializable {
 
         @Override
         protected Optional<HealableChunk> buildContent(DataView container) throws InvalidDataException {
-            final Optional<List<HealableExplosion>> opt = container.getSerializableList(Keys.EXPLOSION, HealableExplosion.class);
+            final Optional<List<ExplosionSnapshot>> opt = container.getSerializableList(Keys.EXPLOSION, ExplosionSnapshot.class);
             if(!opt.isPresent()) {
                 logger.error("Found a {} data without explosions ... skipping.", HealableChunk.class.getSimpleName());
                 return Optional.empty();

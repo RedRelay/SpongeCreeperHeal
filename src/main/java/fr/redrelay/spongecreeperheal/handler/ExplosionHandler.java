@@ -1,8 +1,8 @@
 package fr.redrelay.spongecreeperheal.handler;
 
 import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
+import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.chunk.component.HealableEntry;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableExplosion;
 import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
@@ -41,7 +41,7 @@ public class ExplosionHandler {
         healables.parallelStream()
                 .collect(Collectors.groupingBy(healableEntry -> healableEntry.getBlockSnapshot().getLocation().get().getChunkPosition(), Collectors.toCollection(LinkedList::new)))
                 .forEach((chunkPos, healableEntries) -> {
-                    HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new HealableExplosion(healableEntries));
+                    HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(healableEntries));
                 });
     }
 

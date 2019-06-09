@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * HealableExplosion represent a memorized list of HealableEntry after an Explosion.
- * All HealableEntry of a HealableExplosion should be on the same chunk
- * It means a multi chunk explosion create multiple HealableExplosion for each chunk
- * Each HealTask ticks decrements first HealableEntry of HealableExplosion
+ * ExplosionSnapshot represent a memorized list of HealableEntry after an Explosion.
+ * All HealableEntry of a ExplosionSnapshot should be on the same chunk
+ * It means a multi chunk explosion create multiple ExplosionSnapshot for each chunk
+ * Each HealTask ticks decrements first HealableEntry of ExplosionSnapshot
  * When HealableEntry timer reach 0, it is restored and dropped from the list
- * Empty HealableExplosion must not be keep in memory to avoid leak
+ * Empty ExplosionSnapshot must not be keep in memory to avoid leak
  */
-public class HealableExplosion implements DataSerializable {
+public class ExplosionSnapshot implements DataSerializable {
     private final LinkedList<HealableEntry> entries = new LinkedList<>();
 
-    public HealableExplosion(Collection<HealableEntry> entries){
+    public ExplosionSnapshot(Collection<HealableEntry> entries){
         this.entries.addAll(entries);
     }
 
@@ -50,19 +50,19 @@ public class HealableExplosion implements DataSerializable {
     }
 
     /**
-     * Used to build HealableExplosion
+     * Used to build ExplosionSnapshot
      */
-    public static class HealableExplosionBuilder extends AbstractDataBuilder<HealableExplosion> {
+    public static class HealableExplosionBuilder extends AbstractDataBuilder<ExplosionSnapshot> {
 
         public HealableExplosionBuilder() {
-            super(HealableExplosion.class, 0);
+            super(ExplosionSnapshot.class, 0);
         }
 
         @Override
-        protected Optional<HealableExplosion> buildContent(DataView data) throws InvalidDataException {
+        protected Optional<ExplosionSnapshot> buildContent(DataView data) throws InvalidDataException {
             final List<HealableEntry> entries = data.getSerializableList(DataQuery.of("entries"), HealableEntry.class)
-                    .orElseThrow(() -> new InvalidDataException(HealableExplosion.class.getSimpleName()+" : Missing \"entries\" data"));
-            return Optional.of(new HealableExplosion(entries));
+                    .orElseThrow(() -> new InvalidDataException(ExplosionSnapshot.class.getSimpleName()+" : Missing \"entries\" data"));
+            return Optional.of(new ExplosionSnapshot(entries));
         }
     }
 }
