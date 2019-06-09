@@ -23,8 +23,8 @@ public abstract class ChorusDependencyFactory extends AbstractDependencyFactory 
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posDown = blockSnapshot.getPosition().add(Direction.DOWN.asBlockOffset());
-        final Optional<BlockState> optBlockDown = Optional.ofNullable(index.get(posDown));
-        if(optBlockDown.isPresent() && (optBlockDown.get().getType().equals(BlockTypes.CHORUS_PLANT) || optBlockDown.get().getType().equals(BlockTypes.END_STONE))) {
+        final BlockState blockDown = index.get(posDown);
+        if(blockDown != null && (blockDown.getType().equals(BlockTypes.CHORUS_PLANT) || blockDown.getType().equals(BlockTypes.END_STONE))) {
             return Optional.of(BasicDependencyModel.createUniqueDependency(posDown));
         }
         return Optional.empty();

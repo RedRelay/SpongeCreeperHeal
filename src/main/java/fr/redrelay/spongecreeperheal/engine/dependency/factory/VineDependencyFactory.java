@@ -36,7 +36,7 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posUp = blockSnapshot.getPosition().add(Direction.UP.asBlockOffset());
-        final Optional<BlockState> posUpBlock = Optional.ofNullable(index.get(posUp));
+        final BlockState posUpBlock = index.get(posUp);
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
@@ -55,7 +55,7 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
                 .map(BasicDependencyModel::createUniqueDependency)
                 .collect(Collectors.toList());
 
-        if(posUpBlock.isPresent() && posUpBlock.get().getType().equals(BlockTypes.VINE)) {
+        if(posUpBlock != null && posUpBlock.getType().equals(BlockTypes.VINE)) {
             dependencies.add(BasicDependencyModel.createUniqueDependency(posUp));
         }
 
