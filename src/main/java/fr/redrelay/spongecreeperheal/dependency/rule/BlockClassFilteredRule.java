@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.engine.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule;
 
 import net.minecraft.block.Block;
 import org.spongepowered.api.block.BlockType;

@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.engine.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule;
 
 public interface DependencyRule {
     void registerDependencies();

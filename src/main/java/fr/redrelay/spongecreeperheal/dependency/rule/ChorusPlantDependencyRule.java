@@ -1,7 +1,7 @@
-package fr.redrelay.spongecreeperheal.engine.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule;
 
-import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.engine.dependency.factory.ChorusPlantDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.ChorusPlantDependencyFactory;
 import net.minecraft.block.BlockChorusPlant;
 import org.spongepowered.api.block.BlockType;
 

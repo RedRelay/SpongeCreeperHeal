@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.engine.dependency;
+package fr.redrelay.spongecreeperheal.dependency;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyIterator;
@@ -6,8 +6,8 @@ import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableEntry;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.DependencyRule;
+import fr.redrelay.spongecreeperheal.block.HealableEntry;
+import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;

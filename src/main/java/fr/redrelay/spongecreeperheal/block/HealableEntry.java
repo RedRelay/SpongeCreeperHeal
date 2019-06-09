@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.chunk.component;
+package fr.redrelay.spongecreeperheal.block;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import org.spongepowered.api.block.BlockSnapshot;

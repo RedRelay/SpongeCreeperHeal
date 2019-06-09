@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.world.Chunk;
 

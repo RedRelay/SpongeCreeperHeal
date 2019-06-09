@@ -1,8 +1,8 @@
 package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
-import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
-import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.GravityAffectedDependencyRule;
+import fr.redrelay.spongecreeperheal.dependency.DependencyEngine;
+import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.rule.GravityAffectedDependencyRule;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.chunk;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;

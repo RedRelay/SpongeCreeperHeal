@@ -1,5 +1,6 @@
-package fr.redrelay.spongecreeperheal.chunk.component;
+package fr.redrelay.spongecreeperheal.snapshot;
 
+import fr.redrelay.spongecreeperheal.block.HealableEntry;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;

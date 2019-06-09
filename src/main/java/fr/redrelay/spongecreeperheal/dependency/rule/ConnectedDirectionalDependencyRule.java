@@ -1,10 +1,10 @@
-package fr.redrelay.spongecreeperheal.engine.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
-import fr.redrelay.spongecreeperheal.engine.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.engine.dependency.factory.ConnectedDirectionDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyFactory;
 import net.minecraft.block.Block;
 import org.spongepowered.api.block.BlockType;
 

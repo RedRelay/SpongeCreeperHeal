@@ -1,8 +1,8 @@
-package fr.redrelay.spongecreeperheal.engine.dependency;
+package fr.redrelay.spongecreeperheal.dependency;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
-import fr.redrelay.spongecreeperheal.engine.dependency.rule.*;
+import fr.redrelay.spongecreeperheal.dependency.rule.*;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;

@@ -1,9 +1,9 @@
 package fr.redrelay.spongecreeperheal.handler;
 
+import fr.redrelay.spongecreeperheal.block.HealableEntry;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
-import fr.redrelay.spongecreeperheal.chunk.component.ExplosionSnapshot;
-import fr.redrelay.spongecreeperheal.chunk.component.HealableEntry;
-import fr.redrelay.spongecreeperheal.engine.dependency.DependencyEngine;
+import fr.redrelay.spongecreeperheal.dependency.DependencyEngine;
+import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.event.Listener;

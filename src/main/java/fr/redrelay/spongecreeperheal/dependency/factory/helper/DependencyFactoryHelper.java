@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.engine.dependency.factory.helper;
+package fr.redrelay.spongecreeperheal.dependency.factory.helper;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
