@@ -1,7 +1,6 @@
 package fr.redrelay.spongecreeperheal.chunk.component;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
@@ -15,8 +14,6 @@ public class HealableEntry implements DataSerializable {
         final static DataQuery BLOCK_SNAPSHOT = DataQuery.of("blockSnapshot");
         final static DataQuery REMAINING_TIME = DataQuery.of("remainingTime");
     }
-
-    private static Logger logger = SpongeCreeperHeal.getLogger();
 
     private final BlockSnapshot blockSnapshot;
     private int remainingTime = 1;
@@ -42,7 +39,7 @@ public class HealableEntry implements DataSerializable {
 
     public void decreaseRemainingTime() {
         if(this.remainingTime <= 0) {
-            logger.error("Cannot decrease remaining time because it is already 0 ... skipping");
+            SpongeCreeperHeal.getLogger().error("Cannot decrease remaining time because it is already 0 ... skipping");
             return;
         }
         this.remainingTime--;
@@ -72,11 +69,11 @@ public class HealableEntry implements DataSerializable {
         protected Optional<HealableEntry> buildContent(DataView data) throws InvalidDataException {
             final Optional<BlockSnapshot> optBlockSnapshot = data.getSerializable(Keys.BLOCK_SNAPSHOT, BlockSnapshot.class);
             if(!optBlockSnapshot.isPresent()) {
-                logger.error("Found HealableEntry data without BlockSnapshot ... skipping.");
+                SpongeCreeperHeal.getLogger().error("Found HealableEntry data without BlockSnapshot ... skipping.");
                 return Optional.empty();
             }
             final int remainingTime = data.getInt(Keys.REMAINING_TIME).orElseGet(() -> {
-                logger.error("Missing \""+Keys.REMAINING_TIME.toString()+"\" data : set default to 1");
+                SpongeCreeperHeal.getLogger().error("Missing \""+Keys.REMAINING_TIME.toString()+"\" data : set default to 1");
                 return 1;
             });
 
@@ -84,7 +81,7 @@ public class HealableEntry implements DataSerializable {
             try {
                 entry.setRemainingTime(remainingTime);
             }catch(IllegalArgumentException err) {
-                logger.error("Error occured while deserialize HealableEntry : "+err.getMessage()+" ... set default to 1");
+                SpongeCreeperHeal.getLogger().error("Error occured while deserialize HealableEntry : "+err.getMessage()+" ... set default to 1");
                 entry.setRemainingTime(1);
             }
 
