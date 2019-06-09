@@ -50,7 +50,7 @@ public class HealableExplosion implements DataSerializable {
         @Override
         protected Optional<HealableExplosion> buildContent(DataView data) throws InvalidDataException {
             final List<HealableEntry> entries = data.getSerializableList(DataQuery.of("entries"), HealableEntry.class)
-                    .orElseThrow(() -> new InvalidDataException("HealableExplosion : Missing \"entries\" data"));
+                    .orElseThrow(() -> new InvalidDataException(HealableExplosion.class.getSimpleName()+" : Missing \"entries\" data"));
             return Optional.of(new HealableExplosion(entries));
         }
     }
