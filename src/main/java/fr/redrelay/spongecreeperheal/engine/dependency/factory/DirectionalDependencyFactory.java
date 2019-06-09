@@ -8,6 +8,7 @@ import fr.redrelay.spongecreeperheal.engine.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableDirectionalData;
+import org.spongepowered.api.data.manipulator.mutable.block.DirectionalData;
 import org.spongepowered.api.util.Direction;
 
 import java.util.Map;
@@ -64,7 +65,7 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
     protected Direction getDirection(BlockState block) {
         final Optional<ImmutableDirectionalData> data = block.get(ImmutableDirectionalData.class);
         if(!data.isPresent() || !data.get().direction().exists()) {
-            throw new NoDirectionalException(this.getClass().getSimpleName()+" configured block state without any DirectionalData : "+block.getType().getName());
+            throw new NoDirectionalException(this.getClass().getSimpleName()+" configured block state without any "+ DirectionalData.class.getSimpleName() +" : "+block.getType().getName());
         }
 
         final Direction direction = data.get().direction().get();

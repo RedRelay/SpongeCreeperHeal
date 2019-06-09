@@ -13,6 +13,7 @@ import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
+import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
 import org.spongepowered.api.util.Direction;
 
 import java.util.*;
@@ -40,7 +41,7 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
-            throw new ConnectedDirectionDependencyFactory.NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any ConnectedDirectionData : "+blockSnapshot.getState().getType().getName());
+            throw new ConnectedDirectionDependencyFactory.NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any "+ ConnectedDirectionData.class.getSimpleName() +" : "+blockSnapshot.getState().getType().getName());
         }
 
         final Set<Direction> attachedTo = data.get().connectedDirections().get();

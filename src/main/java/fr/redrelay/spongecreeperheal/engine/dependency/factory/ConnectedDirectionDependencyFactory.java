@@ -7,6 +7,7 @@ import fr.redrelay.spongecreeperheal.engine.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
+import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
 
 import java.util.Map;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
-            throw new NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any ConnectedDirectionData : "+blockSnapshot.getState().getType().getName());
+            throw new NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any "+ ConnectedDirectionData.class.getSimpleName() +" : "+blockSnapshot.getState().getType().getName());
         }
 
         final DependencyModel[] dependencies = data.get().connectedDirections().get().parallelStream()
