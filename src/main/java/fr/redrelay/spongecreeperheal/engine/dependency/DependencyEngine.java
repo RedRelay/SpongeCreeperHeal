@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class DependencyEngine {
     private static final DependencyEngine INSTANCE = new DependencyEngine();
 
-    private Logger logger = SpongeCreeperHeal.getLogger();
+    private final Logger logger = SpongeCreeperHeal.getLogger();
     private final Map<BlockType, DependencyFactory> map = new HashMap<>();
 
     private DependencyEngine() {}
