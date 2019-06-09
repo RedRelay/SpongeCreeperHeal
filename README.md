@@ -26,7 +26,7 @@ Here is a base roadmap :
 - [x] Restore a blockSnapshot
 - [x] Persist data
 - [x] Create a dependency engine
-- [ ] Register all dependencies -> the longest step (tracker : https://github.com/RedRelay/SpongeCreeperHeal/issues/4)
+- [x] Register all dependencies -> the longest step (tracker : https://github.com/RedRelay/SpongeCreeperHeal/issues/4)
 - [ ] Support multi blocks
 - [ ] Configurable healing clock
 
