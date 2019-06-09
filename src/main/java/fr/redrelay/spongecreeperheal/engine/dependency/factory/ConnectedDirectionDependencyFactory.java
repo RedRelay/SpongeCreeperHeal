@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public abstract class ConnectedDirectionDependencyFactory extends AbstractDependencyFactory {
 
-    public static class NoConnectedDataException extends RuntimeException {
-        public NoConnectedDataException(String message) {
+    public static class NoConnectedDirectionException extends RuntimeException {
+        public NoConnectedDirectionException(String message) {
             super(message);
         }
     }
@@ -28,7 +28,7 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
-            throw new NoConnectedDataException(this.getClass().getSimpleName()+"configured block state without any DirectionalData : "+blockSnapshot.getState().getType().getName());
+            throw new NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any ConnectedDirectionData : "+blockSnapshot.getState().getType().getName());
         }
 
         final DependencyModel[] dependencies = data.get().connectedDirections().get().parallelStream()

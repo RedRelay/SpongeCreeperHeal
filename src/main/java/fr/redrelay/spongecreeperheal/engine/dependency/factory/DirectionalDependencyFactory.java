@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class DirectionalDependencyFactory extends AbstractDependencyFactory {
 
-    public static class NoDirectionalDataException extends RuntimeException {
-        public NoDirectionalDataException(String message) {
+    public static class NoDirectionalException extends RuntimeException {
+        public NoDirectionalException(String message) {
             super(message);
         }
     }
@@ -54,7 +54,7 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
             if (index.containsKey(dependency)) {
                 return Optional.of(BasicDependencyModel.createUniqueDependency(dependency));
             }
-        }catch(NoDirectionalDataException error) {
+        }catch(NoDirectionalException error) {
             SpongeCreeperHeal.getLogger().warn(error.getMessage());
         }
 
@@ -64,7 +64,7 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
     protected Direction getDirection(BlockState block) {
         final Optional<ImmutableDirectionalData> data = block.get(ImmutableDirectionalData.class);
         if(!data.isPresent() || !data.get().direction().exists()) {
-            throw new NoDirectionalDataException(this.getClass().getSimpleName()+" configured block state without any DirectionalData : "+block.getType().getName());
+            throw new NoDirectionalException(this.getClass().getSimpleName()+" configured block state without any DirectionalData : "+block.getType().getName());
         }
 
         final Direction direction = data.get().direction().get();
