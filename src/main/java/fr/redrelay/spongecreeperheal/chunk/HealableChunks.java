@@ -13,7 +13,7 @@ public class HealableChunks {
 
     private final Map<UUID, HealableChunk> map = new HashMap<>();
 
-    private Logger logger = SpongeCreeperHeal.getLogger();
+    private final Logger logger = SpongeCreeperHeal.getLogger();
 
     private HealableChunks(){};
 
@@ -24,23 +24,23 @@ public class HealableChunks {
     public void add(Chunk chunk, HealableExplosion explosion) {
         final Optional<HealableChunk> healableChunk = this.get(chunk.getUniqueId());
         if(healableChunk.isPresent()) {
-            logger.debug("Adding a new explosion to an existing chunk "+healableChunk.get().getChunkPos().toString());
+            logger.debug("Adding a new explosion to an existing {} {}",HealableChunk.class.getSimpleName(), healableChunk.get().getChunkPos().toString());
             healableChunk.get().getExplosions().add(explosion);
         }else {
-            logger.debug("Adding a new explosion to a new HealableChunk "+chunk.getPosition().toString());
+            logger.debug("Adding a new explosion to a new {} {}", HealableChunk.class.getSimpleName(), chunk.getPosition().toString());
             register(chunk.getUniqueId(), new HealableChunk(chunk.getWorld().getName(), chunk.getPosition(), explosion));
         }
     }
 
     protected void register(UUID id, HealableChunk chunk) {
         if(!chunk.isLinkedToMinecraftCoord()) {
-            throw new RuntimeException("HealableChunk \""+id+"\" is not linked to Minecraft coordinates");
+            throw new RuntimeException(HealableChunk.class.getSimpleName()+" \""+id+"\" is not linked to Minecraft coordinates");
         }
-        logger.info("Registering HealableChunk "+id);
+        logger.info("Registering {} {}", HealableChunk.class.getSimpleName(), id);
         map.put(id, chunk);
     }
     protected void unregister(UUID id) {
-        logger.info("Unregistering HealableChunk "+id);
+        logger.info("Unregistering {} {} ", HealableChunk.class.getSimpleName(), id);
         map.remove(id);
     }
 
