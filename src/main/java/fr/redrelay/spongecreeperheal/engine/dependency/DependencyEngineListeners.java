@@ -4,6 +4,7 @@ import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
 import fr.redrelay.spongecreeperheal.engine.dependency.rule.*;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
+import net.minecraft.block.BlockVine;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 
@@ -20,8 +21,9 @@ public class DependencyEngineListeners {
         final DependencyEngine dependencyEngine = DependencyEngine.getInstance();
         dependencyEngine.register(new GravityAffectedDependencyRule());
         MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DownLayedDependencyRule(blockClass)));
-        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new FacingDependencyRule(blockClass, true)));
-        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new FacingDependencyRule(blockClass)));
+        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DirectionalDependencyRule(blockClass, true)));
+        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DirectionalDependencyRule(blockClass)));
+        dependencyEngine.register(new ConnectedDirectionalDependencyRule(BlockVine.class));
         dependencyEngine.register(new ChorusPlantDependencyRule());
         dependencyEngine.register(new ChorusFlowerDependencyRule());
 

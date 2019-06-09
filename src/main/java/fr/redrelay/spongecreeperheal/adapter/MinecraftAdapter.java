@@ -62,4 +62,5 @@ public final class MinecraftAdapter {
     public Set<Class<? extends Block>> getFacingLayedBlocks() {
         return facingLayedBlocks;
     }
+
 }
