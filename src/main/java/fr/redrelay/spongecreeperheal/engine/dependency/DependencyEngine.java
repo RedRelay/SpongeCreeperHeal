@@ -12,11 +12,18 @@ import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.LocatableSnapshot;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * All dependency related stuff are here
+ * Rules registering
+ * DependencyFactory registering
+ * Sorting BlockSnapshot
+ */
 public class DependencyEngine {
     private static final DependencyEngine INSTANCE = new DependencyEngine();
 
@@ -26,14 +33,20 @@ public class DependencyEngine {
     private DependencyEngine() {}
 
 
+    /**
+     * Creates a list of HealableEntry for a collection of BlockSnapshot
+     * @param entries
+     * @return
+     */
     public LinkedList<HealableEntry> build(Collection<BlockSnapshot> entries) {
-
         final Map<Vector3i, BlockSnapshot> indexedBlockSnapshot = entries.parallelStream()
-                .collect(Collectors.toMap(entry -> entry.getPosition(), Function.identity()));
+                .collect(Collectors.toMap(LocatableSnapshot::getPosition, Function.identity()));
 
+        //Create unmodifiable map of position -> blockstate : this is the index for DependencyFactories
         final Map<Vector3i, BlockState> indexedBlockStates = Collections.unmodifiableMap(entries.parallelStream()
-                .collect(Collectors.toMap(entry -> entry.getPosition(), entry -> entry.getState())));
+                .collect(Collectors.toMap(LocatableSnapshot::getPosition, BlockSnapshot::getState)));
 
+        //Convert BlockSnapshot collection to a list of dependency node
         final List<DependencyNode<Vector3i>> nodes = entries.parallelStream()
                 .map(entry -> convertToDependencyNodes(entry, indexedBlockStates))
                 .collect(Collectors.toList());

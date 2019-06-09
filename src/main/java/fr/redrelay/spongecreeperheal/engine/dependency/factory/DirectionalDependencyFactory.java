@@ -13,7 +13,9 @@ import org.spongepowered.api.util.Direction;
 
 import java.util.Map;
 import java.util.Optional;
-
+/**
+ * Used to create Dependency models based on block having DirectionalData
+ */
 public class DirectionalDependencyFactory extends AbstractDependencyFactory {
 
     public static class NoDirectionalException extends RuntimeException {
@@ -22,6 +24,9 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
         }
     }
 
+    /**
+     * Used to created Dependency models based on hardcoded block having DirectionalData
+     */
     public static class Static extends DirectionalDependencyFactory {
 
         private final Direction direction;
@@ -39,6 +44,11 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
 
     private final boolean isOpposite;
 
+    /**
+     * Create a DirectionalDependencyFactory
+     * @param rule
+     * @param isOpposite if you must get the opposite direction to have block offset
+     */
     public DirectionalDependencyFactory(DependencyRule rule, boolean isOpposite) {
         super(rule);
         this.isOpposite = isOpposite;
@@ -48,6 +58,12 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
         this(rule, false);
     }
 
+    /**
+     * Looks for the specified direction and retains it only if it is contained in index
+     * @param currentBlock
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot currentBlock, Map<Vector3i, BlockState> index) {
         try {

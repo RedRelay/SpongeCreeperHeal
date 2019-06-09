@@ -10,6 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * HealableExplosion represent a memorized list of HealableEntry after an Explosion.
+ * All HealableEntry of a HealableExplosion should be on the same chunk
+ * It means a multi chunk explosion create multiple HealableExplosion for each chunk
+ * Each HealTask ticks decrements first HealableEntry of HealableExplosion
+ * When HealableEntry timer reach 0, it is restored and dropped from the list
+ * Empty HealableExplosion must not be keep in memory to avoid leak
+ */
 public class HealableExplosion implements DataSerializable {
     private final LinkedList<HealableEntry> entries = new LinkedList<>();
 
@@ -41,6 +49,9 @@ public class HealableExplosion implements DataSerializable {
         return data;
     }
 
+    /**
+     * Used to build HealableExplosion
+     */
     public static class HealableExplosionBuilder extends AbstractDataBuilder<HealableExplosion> {
 
         public HealableExplosionBuilder() {

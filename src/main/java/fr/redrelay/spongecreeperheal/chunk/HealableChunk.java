@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * HealableChunk contains a list of HealableExplosion to be restored
+ * It represents all explosions for a chunk
+ */
 public class HealableChunk implements DataSerializable {
 
     private static class Keys {
@@ -39,14 +43,28 @@ public class HealableChunk implements DataSerializable {
         this.explosions.add(explosion);
     }
 
+    /**
+     * Gets world name where the chunk is located
+     * @return
+     */
     public String getWorldName() {
         return worldName;
     }
 
+    /**
+     * Gets where is located the chunk
+     * @return
+     */
     public Vector3i getChunkPos() {
         return chunkPos;
     }
 
+    /**
+     * Due to serialization and deserialization mechanism
+     * We cannot always use world name and chunk position while in constructor
+     * This method helps to know if HealableChunk is correctly attached to a world
+     * @return
+     */
     public boolean isLinkedToMinecraftCoord() {
         return worldName != null && chunkPos != null;
     }
@@ -73,6 +91,9 @@ public class HealableChunk implements DataSerializable {
         return data;
     }
 
+    /**
+     * Used to build HealableChunk
+     */
     public static class HealableChunkBuilder extends AbstractDataBuilder<HealableChunk> {
 
         public HealableChunkBuilder() {
@@ -83,7 +104,7 @@ public class HealableChunk implements DataSerializable {
         protected Optional<HealableChunk> buildContent(DataView container) throws InvalidDataException {
             final Optional<List<HealableExplosion>> opt = container.getSerializableList(Keys.EXPLOSION, HealableExplosion.class);
             if(!opt.isPresent()) {
-                logger.error("Found a "+HealableChunk.class.getSimpleName()+" data without explosions ... skipping.");
+                logger.error("Found a {} data without explosions ... skipping.", HealableChunk.class.getSimpleName());
                 return Optional.empty();
             }
             return Optional.of(new HealableChunk(opt.get()));

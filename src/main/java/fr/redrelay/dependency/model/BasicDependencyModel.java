@@ -22,6 +22,10 @@ public class BasicDependencyModel<T> implements DependencyModel<T> {
         return !dependencies.isEmpty();
     }
 
+    /**
+     *
+     * @return An unmodifiable Set of dependencies
+     */
     @Override
     public Set<T> getDependencies() {
         return Collections.unmodifiableSet(dependencies);

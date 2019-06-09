@@ -10,12 +10,22 @@ import org.spongepowered.api.block.BlockState;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Create dependency models for Chorus Plant
+ */
 public class ChorusPlantDependencyFactory extends ChorusDependencyFactory {
 
     public ChorusPlantDependencyFactory(DependencyRule rule) {
         super(rule);
     }
 
+    /**
+     * If bottom block is contained into the index or is a chorus plant or a end stone, return it
+     * Else dependency is one of the contained into index horizontal adjacent chorus plant
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Optional<DependencyModel<Vector3i>> optBlockDown = super.build(blockSnapshot, index);

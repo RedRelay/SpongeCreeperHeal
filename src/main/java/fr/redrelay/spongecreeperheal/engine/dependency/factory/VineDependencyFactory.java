@@ -19,8 +19,14 @@ import org.spongepowered.api.util.Direction;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Used to create vine dependency models
+ */
 public class VineDependencyFactory extends AbstractDependencyFactory {
 
+    /**
+     * Only used to easyly access to isExceptBlockForAttaching from BlockVine which is protected
+     */
     private final static class VineAdapter extends BlockVine {
 
         private VineAdapter() {}
@@ -34,6 +40,14 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
         super(rule);
     }
 
+    /**
+     * As native solution seems to be broken @see https://forums.spongepowered.org/t/blockvine-connecteddirectiondata-seems-to-be-broken/29212
+     * A custom solution has been developped
+     * Create a Or dependency model to wait upside vine block or valid horizontal side block
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posUp = blockSnapshot.getPosition().add(Direction.UP.asBlockOffset());

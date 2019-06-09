@@ -12,6 +12,9 @@ import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionDa
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Used to create Dependency models based on block having ConnectedDirectionData
+ */
 public abstract class ConnectedDirectionDependencyFactory extends AbstractDependencyFactory {
 
     public static class NoConnectedDirectionException extends RuntimeException {
@@ -24,6 +27,13 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
         super(rule);
     }
 
+    /**
+     * Iterate over all direction matchning with ConnectedDirectionData of block snapshot
+     * Retains only when is contained into index
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
 
@@ -50,5 +60,10 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
         return Optional.of(merge(dependencies));
     }
 
+    /**
+     * If multiple direction was found, how to merge them ? Or ? And ?
+     * @param dependencies
+     * @return
+     */
     protected abstract DependencyModel<Vector3i> merge(DependencyModel<Vector3i>... dependencies);
 }

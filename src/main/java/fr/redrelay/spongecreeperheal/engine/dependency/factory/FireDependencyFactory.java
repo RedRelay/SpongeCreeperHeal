@@ -14,12 +14,21 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Create fire dependency models
+ */
 public class FireDependencyFactory extends AbstractDependencyFactory {
 
     public FireDependencyFactory(DependencyRule rule) {
         super(rule);
     }
 
+    /**
+     * Looks for all flammable block around and retains only those contained in index
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
 

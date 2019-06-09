@@ -14,12 +14,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Regroup Chorus common dependency
+ */
 public abstract class ChorusDependencyFactory extends AbstractDependencyFactory {
 
     protected ChorusDependencyFactory(DependencyRule rule) {
         super(rule);
     }
 
+    /**
+     * Check if the block below if a Chorus Plant or a End Stone
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     @Override
     public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posDown = blockSnapshot.getPosition().add(Direction.DOWN.asBlockOffset());
@@ -30,6 +39,12 @@ public abstract class ChorusDependencyFactory extends AbstractDependencyFactory 
         return Optional.empty();
     }
 
+    /**
+     * Create a stream of all chorus plant horizontally adjacent to the block snapshot and contained into the index
+     * @param blockSnapshot
+     * @param index
+     * @return
+     */
     protected Stream<DependencyModel<Vector3i>> sideDependencyStream(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         return DependencyFactoryHelper.sideBlocks(blockSnapshot, index)
                 .filter(pos -> index.get(pos).getType().equals(BlockTypes.CHORUS_PLANT))
