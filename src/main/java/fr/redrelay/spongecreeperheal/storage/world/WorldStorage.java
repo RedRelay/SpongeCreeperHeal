@@ -17,11 +17,11 @@ public class WorldStorage {
     private final String worldName;
     private final LevelDB db;
 
-    private Logger logger = SpongeCreeperHeal.getInstance().get().getLogger();
+    private final Logger logger = SpongeCreeperHeal.getLogger();
 
     protected WorldStorage(World world) throws IOException {
         this.worldName = world.getName();
-        logger.info("Openning spongecreeperheal:WorldStorage for world \""+worldName+"\"");
+        logger.info("Openning spongecreeperheal:WorldStorage for world \"{}\"", worldName);
         this.db = new LevelDB(world.getDirectory().resolve("spongecreeperheal.db").toFile());
     }
 
@@ -42,7 +42,7 @@ public class WorldStorage {
     }
 
     public void close() {
-        logger.info("Closing spongecreeperheal:WorldStorage for world \""+worldName+"\"");
+        logger.info("Closing spongecreeperheal:WorldStorage for world \"{}\"", worldName);
         db.close();
     }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class LevelDB {
 
-    private Logger logger = SpongeCreeperHeal.getLogger();
+    private final Logger logger = SpongeCreeperHeal.getLogger();
 
     private final DB db;
 
@@ -31,7 +31,7 @@ public class LevelDB {
         try {
             db.close();
         } catch (IOException e) {
-            logger.error("Unable to close LevelDB", e);
+            logger.error("Unable to close {} : {}", LevelDB.class.getSimpleName(), e);
         }
     }
 
@@ -39,7 +39,7 @@ public class LevelDB {
         try {
             db.put(bytes(chunkPos), bytes(data));
         } catch (IOException e) {
-            logger.error("Unable to save DataContainer "+data.getName(), e);
+            logger.error("Unable to save {} {} : {}", DataContainer.class.getSimpleName(), data.getName(), e);
         }
     }
 
@@ -50,7 +50,7 @@ public class LevelDB {
                 return Optional.ofNullable(asDataContainer(data));
             }
         } catch (IOException e) {
-            logger.error("Unable to load DataContainer of chunk "+chunkPos.toString(), e);
+            logger.error("Unable to load {} of chunk {} : {}",DataContainer.class.getSimpleName(), chunkPos.toString(), e);
         }
         return Optional.empty();
     }
@@ -72,14 +72,14 @@ public class LevelDB {
         DataFormats.JSON.writeTo(stream, data);
         final byte[] result = stream.toByteArray();
         if(logger.isDebugEnabled()){
-            logger.debug("DataContainer -> byte[] : " + new String(result));
+            logger.debug("{} -> byte[] : {}",DataContainer.class.getSimpleName(),  new String(result));
         }
         return result;
     }
 
     private DataContainer asDataContainer(byte[] bytes) throws IOException {
         if(logger.isDebugEnabled()){
-            logger.debug("byte[] -> DataContainer : " + new String(bytes));
+            logger.debug("byte[] -> {} : {}", DataContainer.class.getSimpleName(), new String(bytes));
         }
         return DataFormats.JSON.readFrom(new ByteArrayInputStream(bytes));
     }
