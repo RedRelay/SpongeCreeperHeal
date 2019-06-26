@@ -1,5 +1,7 @@
 # SpongeCreeperHeal
 
+**INFO :** 06/26 I currently meet some difficulties to setting up Sponge so I can not progress on my devs. More info here : https://forums.spongepowered.org/t/workspace-setup-issues/29491 
+
 SpongeCreeperHeal is a *Work In Progress* project, source are now available but all feature are not implemented.
 Currently SpongeCreeperHeal is not suitable to be deploy on real servers.
 SpongeCreeperHeal is not only a porting of [ForgeCreeperHeal](https://github.com/RedRelay/ForgeCreeperHeal) from Forge to Sponge.
