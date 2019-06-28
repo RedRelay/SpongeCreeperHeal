@@ -1,10 +1,9 @@
 package fr.redrelay.spongecreeperheal.snapshot;
 
-import fr.redrelay.spongecreeperheal.block.HealableEntry;
+import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
-import org.spongepowered.api.world.BlockChangeFlags;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -12,28 +11,33 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ExplosionSnapshot represent a memorized list of HealableEntry after an Explosion.
- * All HealableEntry of a ExplosionSnapshot should be on the same chunk
+ * ExplosionSnapshot represent a memorized list of Healable after an Explosion.
+ * All Healable of a ExplosionSnapshot should be on the same chunk
  * It means a multi chunk explosion create multiple ExplosionSnapshot for each chunk
- * Each HealTask ticks decrements first HealableEntry of ExplosionSnapshot
- * When HealableEntry timer reach 0, it is restored and dropped from the list
+ * Each HealTask ticks decrements first Healable of ExplosionSnapshot
+ * When Healable timer reach 0, it is restored and dropped from the list
  * Empty ExplosionSnapshot must not be keep in memory to avoid leak
  */
 public class ExplosionSnapshot implements DataSerializable {
-    private final LinkedList<HealableEntry> entries = new LinkedList<>();
 
-    public ExplosionSnapshot(Collection<HealableEntry> entries){
+    private static class Keys {
+        final static DataQuery HEALABLES = DataQuery.of("entries");
+    }
+
+    private final LinkedList<ChunkedHealable> entries = new LinkedList<>();
+
+    public ExplosionSnapshot(Collection<ChunkedHealable> entries){
         this.entries.addAll(entries);
     }
 
-    public LinkedList<HealableEntry> getEntries() {
+    public LinkedList<ChunkedHealable> getEntries() {
         return entries;
     }
 
     public void tick() {
         entries.getFirst().decreaseRemainingTime();
         if(entries.getFirst().getRemainingTime() == 0) {
-            entries.removeFirst().getBlockSnapshot().restore(true, BlockChangeFlags.NEIGHBOR_PHYSICS_OBSERVER);
+            entries.removeFirst().restore();
         }
     }
 
@@ -46,7 +50,7 @@ public class ExplosionSnapshot implements DataSerializable {
     public DataContainer toContainer() {
         final DataContainer data = DataContainer.createNew();
         data.set(Queries.CONTENT_VERSION, getContentVersion());
-        data.set(DataQuery.of("entries"), entries);
+        data.set(Keys.HEALABLES, entries);
         return data;
     }
 
@@ -61,8 +65,8 @@ public class ExplosionSnapshot implements DataSerializable {
 
         @Override
         protected Optional<ExplosionSnapshot> buildContent(DataView data) throws InvalidDataException {
-            final List<HealableEntry> entries = data.getSerializableList(DataQuery.of("entries"), HealableEntry.class)
-                    .orElseThrow(() -> new InvalidDataException(ExplosionSnapshot.class.getSimpleName()+" : Missing \"entries\" data"));
+            final List<ChunkedHealable> entries = data.getSerializableList(Keys.HEALABLES, ChunkedHealable.class)
+                    .orElseThrow(() -> new InvalidDataException(ExplosionSnapshot.class.getName()+" : Missing \"entries\" data"));
             return Optional.of(new ExplosionSnapshot(entries));
         }
     }

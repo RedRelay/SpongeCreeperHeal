@@ -1,6 +1,7 @@
 package fr.redrelay.spongecreeperheal.handler;
 
-import fr.redrelay.spongecreeperheal.block.HealableEntry;
+import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.block.Healable;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
 import fr.redrelay.spongecreeperheal.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
@@ -34,16 +35,15 @@ public class ExplosionHandler {
 
                 }).collect(Collectors.toList());
 
-        final LinkedList<HealableEntry> healables = DependencyEngine.getInstance().build(blocks);
+        final LinkedList<Healable> healables = DependencyEngine.getInstance().build(blocks);
 
         this.removeBlocks(blocks);
 
         //TODO : ScheduleService
         healables.parallelStream()
-                .collect(Collectors.groupingBy(healableEntry -> healableEntry.getBlockSnapshot().getLocation().get().getChunkPosition(), Collectors.toCollection(LinkedList::new)))
-                .forEach((chunkPos, healableEntries) -> {
-                    HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(healableEntries));
-                });
+                .flatMap(healable -> healable.split().parallelStream())
+                .collect(Collectors.groupingBy(ChunkedHealable::getChunkPosition, Collectors.toCollection(LinkedList::new)))
+                .forEach((chunkPos, chunkedHealables) -> HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(chunkedHealables)));
     }
 
     private void removeBlocks(List<BlockSnapshot> blocks) {

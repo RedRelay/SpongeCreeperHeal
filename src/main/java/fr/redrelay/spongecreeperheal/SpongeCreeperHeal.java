@@ -1,7 +1,9 @@
 package fr.redrelay.spongecreeperheal;
 
 import com.google.inject.Inject;
-import fr.redrelay.spongecreeperheal.block.HealableEntry;
+import fr.redrelay.spongecreeperheal.block.AbstractHealable;
+import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.block.SimpleHealableBlock;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunk;
 import fr.redrelay.spongecreeperheal.chunk.HealableChunksEventListeners;
 import fr.redrelay.spongecreeperheal.dependency.DependencyEngineListeners;
@@ -52,7 +54,8 @@ public class SpongeCreeperHeal {
 
         dataManager.registerBuilder(HealableChunk.class, new HealableChunk.HealableChunkBuilder());
         dataManager.registerBuilder(ExplosionSnapshot.class, new ExplosionSnapshot.HealableExplosionBuilder());
-        dataManager.registerBuilder(HealableEntry.class, new HealableEntry.HealableEntryBuilder());
+        dataManager.registerBuilder(ChunkedHealable.class, new AbstractHealable.ChunkedHealableBuilder());
+        dataManager.registerBuilder(SimpleHealableBlock.class, new SimpleHealableBlock.Builder());
     }
 
     @Listener

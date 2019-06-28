@@ -6,7 +6,8 @@ import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.block.HealableEntry;
+import fr.redrelay.spongecreeperheal.block.Healable;
+import fr.redrelay.spongecreeperheal.block.SimpleHealableBlock;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
@@ -34,11 +35,11 @@ public class DependencyEngine {
 
 
     /**
-     * Creates a list of HealableEntry for a collection of BlockSnapshot
+     * Creates a list of Healable for a collection of BlockSnapshot
      * @param entries
      * @return
      */
-    public LinkedList<HealableEntry> build(Collection<BlockSnapshot> entries) {
+    public LinkedList<Healable> build(Collection<BlockSnapshot> entries) {
         final Map<Vector3i, BlockSnapshot> indexedBlockSnapshot = entries.parallelStream()
                 .collect(Collectors.toMap(LocatableSnapshot::getPosition, Function.identity()));
 
@@ -52,8 +53,8 @@ public class DependencyEngine {
                 .collect(Collectors.toList());
 
         final DependencyIterator<Vector3i> it = new DependencyIterator<>(nodes);
-        final LinkedList<HealableEntry> healables = new LinkedList<>();
-        it.forEachRemaining(pos -> healables.add(new HealableEntry(indexedBlockSnapshot.get(pos))));
+        final LinkedList<Healable> healables = new LinkedList<>();
+        it.forEachRemaining(pos -> healables.add(new SimpleHealableBlock(indexedBlockSnapshot.get(pos))));
 
         return healables;
     }
