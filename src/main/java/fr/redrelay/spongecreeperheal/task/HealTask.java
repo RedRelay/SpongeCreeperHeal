@@ -2,13 +2,11 @@ package fr.redrelay.spongecreeperheal.task;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
-import org.slf4j.Logger;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.scheduler.Task;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -16,11 +14,9 @@ public class HealTask implements Consumer<Task> {
 
     private static final HealTask INSTANCE = new HealTask();
 
-    private Logger logger = SpongeCreeperHeal.getLogger();
+    private Task task;
 
-    private Optional<Task> task = Optional.empty();
-
-    private HealTask() {};
+    private HealTask() {}
 
     @Override
     public void accept(Task task) {
@@ -30,20 +26,20 @@ public class HealTask implements Consumer<Task> {
     @Listener
     public void onServerStart(GameStartingServerEvent e) {
         SpongeCreeperHeal.getInstance().ifPresent(plugin -> {
-            logger.info("Starting healing task.");
-            task = Optional.ofNullable(Task.builder().execute(this)
+            SpongeCreeperHeal.getLogger().info("Starting healing task.");
+            task = Task.builder().execute(this)
                     .interval(500, TimeUnit.MILLISECONDS)
-                    .name("HealTask").submit(plugin));
+                    .name("HealTask").submit(plugin);
         });
     }
 
     @Listener
     public void onServerStop(GameStoppingServerEvent e) {
-        task.ifPresent(healTask -> {
-            logger.info("Stopping healing task");
-            healTask.cancel();
-        });
-        task = Optional.empty();
+        if(task != null) {
+            SpongeCreeperHeal.getLogger().info("Stopping healing task");
+            task.cancel();
+        }
+        task = null;
     }
 
     public static HealTask getInstance() { return INSTANCE ; }
