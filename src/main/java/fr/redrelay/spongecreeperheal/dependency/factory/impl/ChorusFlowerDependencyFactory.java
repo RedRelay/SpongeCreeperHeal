@@ -1,7 +1,8 @@
-package fr.redrelay.spongecreeperheal.dependency.factory;
+package fr.redrelay.spongecreeperheal.dependency.factory.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
+import fr.redrelay.spongecreeperheal.dependency.factory.ChorusDependencyFactory;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;

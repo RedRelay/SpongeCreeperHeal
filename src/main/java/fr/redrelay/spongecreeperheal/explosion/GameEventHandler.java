@@ -1,8 +1,8 @@
-package fr.redrelay.spongecreeperheal.dependency;
+package fr.redrelay.spongecreeperheal.explosion;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
-import fr.redrelay.spongecreeperheal.dependency.rule.*;
+import fr.redrelay.spongecreeperheal.dependency.rule.impl.*;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -14,9 +14,9 @@ import java.util.Optional;
 /**
  * All event related to Derpendency
  */
-public class DependencyEngineListeners {
-    private static final DependencyEngineListeners INSTANCE = new DependencyEngineListeners();
-    private DependencyEngineListeners(){}
+public class GameEventHandler {
+    private static final GameEventHandler INSTANCE = new GameEventHandler();
+    private GameEventHandler(){}
 
     /**
      * Registers all rules for block
@@ -25,15 +25,15 @@ public class DependencyEngineListeners {
      */
     @Listener
     public void registerDependencyBlocks(GamePostInitializationEvent e) {
-        final DependencyEngine dependencyEngine = DependencyEngine.getInstance();
-        dependencyEngine.register(new GravityAffectedDependencyRule());
-        MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DownLayedDependencyRule(blockClass)));
-        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DirectionalDependencyRule(blockClass, true)));
-        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> dependencyEngine.register(new DirectionalDependencyRule(blockClass)));
-        dependencyEngine.register(new VineDependencyRule());
-        dependencyEngine.register(new ChorusPlantDependencyRule());
-        dependencyEngine.register(new ChorusFlowerDependencyRule());
-        dependencyEngine.register(new FireDependencyRule());
+        final ExplosionSnapshotFactory explosionSnapshotFactory = ExplosionSnapshotFactory.getInstance();
+        explosionSnapshotFactory.register(new GravityAffectedDependencyRule());
+        MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DownLayedDependencyRule(blockClass)));
+        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DirectionalDependencyRule(blockClass, true)));
+        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DirectionalDependencyRule(blockClass)));
+        explosionSnapshotFactory.register(new VineDependencyRule());
+        explosionSnapshotFactory.register(new ChorusPlantDependencyRule());
+        explosionSnapshotFactory.register(new ChorusFlowerDependencyRule());
+        explosionSnapshotFactory.register(new FireDependencyRule());
 
         SpongeCreeperHeal.getConfig().ifPresent(config -> {
             Optional<String> optFilePath = Optional.empty();
@@ -55,5 +55,5 @@ public class DependencyEngineListeners {
 
     }
 
-    public static DependencyEngineListeners getInstance() { return INSTANCE; }
+    public static GameEventHandler getInstance() { return INSTANCE; }
 }

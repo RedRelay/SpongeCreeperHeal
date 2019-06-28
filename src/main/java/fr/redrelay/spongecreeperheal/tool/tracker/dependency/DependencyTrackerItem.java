@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
-import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
 import org.spongepowered.api.block.BlockType;
 
 import java.util.Objects;

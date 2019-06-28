@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.dependency;
+package fr.redrelay.spongecreeperheal.explosion;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyIterator;
@@ -6,6 +6,7 @@ import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 import fr.redrelay.spongecreeperheal.healable.block.impl.SimpleHealableBlock;
@@ -25,13 +26,13 @@ import java.util.stream.Collectors;
  * DependencyFactory registering
  * Sorting BlockSnapshot
  */
-public class DependencyEngine {
-    private static final DependencyEngine INSTANCE = new DependencyEngine();
+public class ExplosionSnapshotFactory {
+    private static final ExplosionSnapshotFactory INSTANCE = new ExplosionSnapshotFactory();
 
     private final Logger logger = SpongeCreeperHeal.getLogger();
     private final Map<BlockType, DependencyFactory> map = new HashMap<>();
 
-    private DependencyEngine() {}
+    private ExplosionSnapshotFactory() {}
 
 
     /**
@@ -97,6 +98,6 @@ public class DependencyEngine {
         return new DependencyNode<Vector3i>(entry.getPosition(),NoDependencyModel.getInstance());
     }
 
-    public static DependencyEngine getInstance() { return INSTANCE; }
+    public static ExplosionSnapshotFactory getInstance() { return INSTANCE; }
 
 }

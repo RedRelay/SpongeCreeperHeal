@@ -1,7 +1,6 @@
 package fr.redrelay.spongecreeperheal.explosion;
 
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
-import fr.redrelay.spongecreeperheal.dependency.DependencyEngine;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 import org.spongepowered.api.block.BlockSnapshot;
@@ -34,7 +33,7 @@ public class ExplosionEventHandler {
 
                 }).collect(Collectors.toList());
 
-        final LinkedList<Healable> healables = DependencyEngine.getInstance().build(blocks);
+        final LinkedList<Healable> healables = ExplosionSnapshotFactory.getInstance().build(blocks);
 
         this.removeBlocks(blocks);
 

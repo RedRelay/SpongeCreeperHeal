@@ -3,13 +3,14 @@ package fr.redrelay.spongecreeperheal.dependency.factory;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
-import fr.redrelay.spongecreeperheal.dependency.factory.helper.DependencyFactoryHelper;
+import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.util.Direction;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -46,8 +47,9 @@ public abstract class ChorusDependencyFactory extends AbstractDependencyFactory 
      * @return
      */
     protected Stream<DependencyModel<Vector3i>> sideDependencyStream(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
-        return DependencyFactoryHelper.sideBlocks(blockSnapshot, index)
-                .filter(pos -> index.get(pos).getType().equals(BlockTypes.CHORUS_PLANT))
+        return  Arrays.asList(DirectionAdapter.HORIZONTAL).stream()
+                .map(direction -> blockSnapshot.getPosition().add(direction.asBlockOffset()))
+                .filter(pos -> index.containsKey(pos)).filter(pos -> index.get(pos).getType().equals(BlockTypes.CHORUS_PLANT))
                 .map(BasicDependencyModel::createUniqueDependency);
     }
 

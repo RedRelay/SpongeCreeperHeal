@@ -1,7 +1,8 @@
-package fr.redrelay.spongecreeperheal.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.DirectionalDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.impl.DirectionalDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.rule.BlockTypeFilteredRule;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.property.block.GravityAffectedProperty;
 import org.spongepowered.api.util.Direction;

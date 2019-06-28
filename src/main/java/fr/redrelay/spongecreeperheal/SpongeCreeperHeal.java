@@ -3,9 +3,9 @@ package fr.redrelay.spongecreeperheal;
 import com.google.inject.Inject;
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
 import fr.redrelay.spongecreeperheal.chunk.ChunkEventHandler;
-import fr.redrelay.spongecreeperheal.dependency.DependencyEngineListeners;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionEventHandler;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.explosion.GameEventHandler;
 import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import fr.redrelay.spongecreeperheal.healable.block.impl.SimpleHealableBlock;
@@ -62,7 +62,7 @@ public class SpongeCreeperHeal {
     public void onGameInit(GameInitializationEvent e) {
         final EventManager eventManager = Sponge.getEventManager();
 
-        eventManager.registerListeners(this, DependencyEngineListeners.getInstance());
+        eventManager.registerListeners(this, GameEventHandler.getInstance());
 
         eventManager.registerListeners(this, ChunkEventHandler.getInstance());
         eventManager.registerListeners(this, WorldStoragesEventListeners.getInstance());

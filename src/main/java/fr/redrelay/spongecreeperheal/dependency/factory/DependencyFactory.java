@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.dependency;
+package fr.redrelay.spongecreeperheal.dependency.factory;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;

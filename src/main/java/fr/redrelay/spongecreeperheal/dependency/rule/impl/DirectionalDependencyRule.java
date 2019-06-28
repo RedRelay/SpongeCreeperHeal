@@ -1,11 +1,12 @@
-package fr.redrelay.spongecreeperheal.dependency.rule;
+package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import fr.redrelay.spongecreeperheal.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.DirectionalDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.impl.DirectionalDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.rule.BlockClassFilteredRule;
 import net.minecraft.block.Block;
 import org.spongepowered.api.block.BlockType;
 
-public class DirectionalDependencyRule extends BlockClassFilteredRule{
+public class DirectionalDependencyRule extends BlockClassFilteredRule {
 
     final boolean isOpposite;
 
