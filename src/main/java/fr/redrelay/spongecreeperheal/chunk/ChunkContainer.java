@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.chunk;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
@@ -15,10 +15,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * HealableChunk contains a list of ExplosionSnapshot to be restored
+ * ChunkContainer contains a list of ExplosionSnapshot to be restored
  * It represents all explosions for a chunk
  */
-public class HealableChunk implements DataSerializable {
+public class ChunkContainer implements DataSerializable {
 
     private static class Keys {
         final static DataQuery EXPLOSION = DataQuery.of("explosions");
@@ -30,14 +30,14 @@ public class HealableChunk implements DataSerializable {
     protected String worldName;
     protected Vector3i chunkPos;
 
-    private HealableChunk(Collection<ExplosionSnapshot> explosions) {
+    private ChunkContainer(Collection<ExplosionSnapshot> explosions) {
         if(explosions.isEmpty()) {
-            throw new RuntimeException(HealableChunk.class.getSimpleName()+" must contains at least one explosion to heal");
+            throw new RuntimeException(ChunkContainer.class.getSimpleName()+" must contains at least one explosion to heal");
         }
         this.explosions.addAll(explosions);
     }
 
-    protected HealableChunk(String worldName, Vector3i chunkPos, ExplosionSnapshot explosion) {
+    protected ChunkContainer(String worldName, Vector3i chunkPos, ExplosionSnapshot explosion) {
         this.worldName = worldName;
         this.chunkPos = chunkPos;
         this.explosions.add(explosion);
@@ -62,7 +62,7 @@ public class HealableChunk implements DataSerializable {
     /**
      * Due to serialization and deserialization mechanism
      * We cannot always use world name and chunk position while in constructor
-     * This method helps to know if HealableChunk is correctly attached to a world
+     * This method helps to know if ChunkContainer is correctly attached to a world
      * @return
      */
     public boolean isLinkedToMinecraftCoord() {
@@ -92,22 +92,22 @@ public class HealableChunk implements DataSerializable {
     }
 
     /**
-     * Used to build HealableChunk
+     * Used to build ChunkContainer
      */
-    public static class HealableChunkBuilder extends AbstractDataBuilder<HealableChunk> {
+    public static class Builder extends AbstractDataBuilder<ChunkContainer> {
 
-        public HealableChunkBuilder() {
-            super(HealableChunk.class, 0);
+        public Builder() {
+            super(ChunkContainer.class, 0);
         }
 
         @Override
-        protected Optional<HealableChunk> buildContent(DataView container) throws InvalidDataException {
+        protected Optional<ChunkContainer> buildContent(DataView container) throws InvalidDataException {
             final Optional<List<ExplosionSnapshot>> opt = container.getSerializableList(Keys.EXPLOSION, ExplosionSnapshot.class);
             if(!opt.isPresent()) {
-                logger.error("Found a {} data without explosions ... skipping.", HealableChunk.class.getSimpleName());
+                logger.error("Found a {} data without explosions ... skipping.", ChunkContainer.class.getSimpleName());
                 return Optional.empty();
             }
-            return Optional.of(new HealableChunk(opt.get()));
+            return Optional.of(new ChunkContainer(opt.get()));
         }
     }
 }

@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.block;
+package fr.redrelay.spongecreeperheal.healable;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import org.spongepowered.api.Sponge;

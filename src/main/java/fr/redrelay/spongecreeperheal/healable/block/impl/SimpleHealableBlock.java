@@ -1,7 +1,9 @@
-package fr.redrelay.spongecreeperheal.block;
+package fr.redrelay.spongecreeperheal.healable.block.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
+import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -14,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-public class SimpleHealableBlock extends AbstractHealable implements ChunkedHealable{
+public class SimpleHealableBlock extends AbstractHealable implements ChunkedHealable {
 
     private static class Keys {
         final static DataQuery BLOCK_SNAPSHOT = DataQuery.of("blockSnapshot");

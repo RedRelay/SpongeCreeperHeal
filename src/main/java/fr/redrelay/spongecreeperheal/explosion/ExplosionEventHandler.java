@@ -1,10 +1,9 @@
-package fr.redrelay.spongecreeperheal.handler;
+package fr.redrelay.spongecreeperheal.explosion;
 
-import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
-import fr.redrelay.spongecreeperheal.block.Healable;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
+import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
 import fr.redrelay.spongecreeperheal.dependency.DependencyEngine;
-import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.Healable;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.event.Listener;
@@ -18,17 +17,17 @@ import java.util.stream.Collectors;
 /**
  * Handle explosion
  */
-public class ExplosionHandler {
-    private static final ExplosionHandler INSTANCE = new ExplosionHandler();
+public class ExplosionEventHandler {
+    private static final ExplosionEventHandler INSTANCE = new ExplosionEventHandler();
 
-    private ExplosionHandler() {}
+    private ExplosionEventHandler() {}
 
     @Listener
     public void onDetonate(ExplosionEvent.Detonate e) {
         final List<BlockSnapshot> blocks = e.getAffectedLocations().stream()
                 .filter(worldLocation -> worldLocation.getBlockType() != BlockTypes.AIR)
                 .map( worldLocation -> {
-                    //Save all block data in snapshot, necessary to restore the block later
+                    //Save all block data in explosion, necessary to restore the block later
                     final BlockSnapshot blockSnapshot = worldLocation.createSnapshot();
 
                     return blockSnapshot;
@@ -43,7 +42,7 @@ public class ExplosionHandler {
         healables.parallelStream()
                 .flatMap(healable -> healable.split().parallelStream())
                 .collect(Collectors.groupingBy(ChunkedHealable::getChunkPosition, Collectors.toCollection(LinkedList::new)))
-                .forEach((chunkPos, chunkedHealables) -> HealableChunks.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(chunkedHealables)));
+                .forEach((chunkPos, chunkedHealables) -> ChunkContainerRegistry.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(chunkedHealables)));
     }
 
     private void removeBlocks(List<BlockSnapshot> blocks) {
@@ -54,5 +53,5 @@ public class ExplosionHandler {
     }
 
 
-    public static ExplosionHandler getInstance() { return INSTANCE; }
+    public static ExplosionEventHandler getInstance() { return INSTANCE; }
 }

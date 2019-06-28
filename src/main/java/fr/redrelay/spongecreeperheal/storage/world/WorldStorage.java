@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.storage.world;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunk;
+import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
 import fr.redrelay.spongecreeperheal.storage.LevelDB;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -25,19 +25,19 @@ public class WorldStorage {
         this.db = new LevelDB(world.getDirectory().resolve("spongecreeperheal.db").toFile());
     }
 
-    public Optional<HealableChunk> get(Vector3i chunkPos) {
+    public Optional<ChunkContainer> get(Vector3i chunkPos) {
         final Optional<DataContainer> opt = db.get(chunkPos);
         if(!opt.isPresent()) {
             return Optional.empty();
         }
-        return Sponge.getDataManager().deserialize(HealableChunk.class, opt.get());
+        return Sponge.getDataManager().deserialize(ChunkContainer.class, opt.get());
     }
 
-    public void save(HealableChunk chunk) {
+    public void save(ChunkContainer chunk) {
         db.save(chunk.getChunkPos(), chunk.toContainer());
     }
 
-    public void delete(HealableChunk chunk) {
+    public void delete(ChunkContainer chunk) {
         db.delete(chunk.getChunkPos());
     }
 

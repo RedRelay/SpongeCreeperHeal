@@ -1,14 +1,14 @@
 package fr.redrelay.spongecreeperheal;
 
 import com.google.inject.Inject;
-import fr.redrelay.spongecreeperheal.block.AbstractHealable;
-import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
-import fr.redrelay.spongecreeperheal.block.SimpleHealableBlock;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunk;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunksEventListeners;
+import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
+import fr.redrelay.spongecreeperheal.chunk.ChunkEventHandler;
 import fr.redrelay.spongecreeperheal.dependency.DependencyEngineListeners;
-import fr.redrelay.spongecreeperheal.handler.ExplosionHandler;
-import fr.redrelay.spongecreeperheal.snapshot.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.explosion.ExplosionEventHandler;
+import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
+import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.block.impl.SimpleHealableBlock;
 import fr.redrelay.spongecreeperheal.storage.world.WorldStoragesEventListeners;
 import fr.redrelay.spongecreeperheal.task.HealTask;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -52,8 +52,8 @@ public class SpongeCreeperHeal {
     public void onGamePreInit(GamePreInitializationEvent e) {
         final DataManager dataManager = Sponge.getDataManager();
 
-        dataManager.registerBuilder(HealableChunk.class, new HealableChunk.HealableChunkBuilder());
-        dataManager.registerBuilder(ExplosionSnapshot.class, new ExplosionSnapshot.HealableExplosionBuilder());
+        dataManager.registerBuilder(ChunkContainer.class, new ChunkContainer.Builder());
+        dataManager.registerBuilder(ExplosionSnapshot.class, new ExplosionSnapshot.Builder());
         dataManager.registerBuilder(ChunkedHealable.class, new AbstractHealable.ChunkedHealableBuilder());
         dataManager.registerBuilder(SimpleHealableBlock.class, new SimpleHealableBlock.Builder());
     }
@@ -64,10 +64,10 @@ public class SpongeCreeperHeal {
 
         eventManager.registerListeners(this, DependencyEngineListeners.getInstance());
 
-        eventManager.registerListeners(this, HealableChunksEventListeners.getInstance());
+        eventManager.registerListeners(this, ChunkEventHandler.getInstance());
         eventManager.registerListeners(this, WorldStoragesEventListeners.getInstance());
         eventManager.registerListeners(this, HealTask.getInstance());
-        eventManager.registerListeners(this, ExplosionHandler.getInstance());
+        eventManager.registerListeners(this, ExplosionEventHandler.getInstance());
     }
 
 

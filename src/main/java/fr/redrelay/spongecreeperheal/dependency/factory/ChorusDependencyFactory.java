@@ -40,7 +40,7 @@ public abstract class ChorusDependencyFactory extends AbstractDependencyFactory 
     }
 
     /**
-     * Create a stream of all chorus plant horizontally adjacent to the block snapshot and contained into the index
+     * Create a stream of all chorus plant horizontally adjacent to the block explosion and contained into the index
      * @param blockSnapshot
      * @param index
      * @return

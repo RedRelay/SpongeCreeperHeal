@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.block;
+package fr.redrelay.spongecreeperheal.healable;
 
 import com.flowpowered.math.vector.Vector3i;
 

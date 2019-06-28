@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.storage.world;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
+import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
 import org.slf4j.Logger;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.world.LoadWorldEvent;
@@ -34,7 +34,7 @@ public class WorldStoragesEventListeners {
     @Listener
     public void onWorldSave(SaveWorldEvent.Post e) {
         e.getTargetWorld().getLoadedChunks().forEach(chunk -> {
-            HealableChunks.getInstance().get(chunk.getUniqueId()).ifPresent(healableChunk -> {
+            ChunkContainerRegistry.getInstance().get(chunk.getUniqueId()).ifPresent(healableChunk -> {
                 WorldStorages.getInstance().get(e.getTargetWorld().getName()).ifPresent(storage -> {
                     storage.save(healableChunk);
                 });

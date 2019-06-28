@@ -1,6 +1,6 @@
-package fr.redrelay.spongecreeperheal.snapshot;
+package fr.redrelay.spongecreeperheal.explosion;
 
-import fr.redrelay.spongecreeperheal.block.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
@@ -57,9 +57,9 @@ public class ExplosionSnapshot implements DataSerializable {
     /**
      * Used to build ExplosionSnapshot
      */
-    public static class HealableExplosionBuilder extends AbstractDataBuilder<ExplosionSnapshot> {
+    public static class Builder extends AbstractDataBuilder<ExplosionSnapshot> {
 
-        public HealableExplosionBuilder() {
+        public Builder() {
             super(ExplosionSnapshot.class, 0);
         }
 

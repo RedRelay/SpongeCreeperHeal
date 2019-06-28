@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * All events related to Derpendency
+ * All event related to Derpendency
  */
 public class DependencyEngineListeners {
     private static final DependencyEngineListeners INSTANCE = new DependencyEngineListeners();

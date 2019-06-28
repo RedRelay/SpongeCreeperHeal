@@ -28,7 +28,7 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
     }
 
     /**
-     * Iterate over all direction matchning with ConnectedDirectionData of block snapshot
+     * Iterate over all direction matchning with ConnectedDirectionData of block explosion
      * Retains only when is contained into index
      * @param blockSnapshot
      * @param index

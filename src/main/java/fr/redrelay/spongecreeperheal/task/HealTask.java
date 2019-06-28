@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.task;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.chunk.HealableChunks;
+import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
 import org.slf4j.Logger;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
@@ -24,7 +24,7 @@ public class HealTask implements Consumer<Task> {
 
     @Override
     public void accept(Task task) {
-        HealableChunks.getInstance().tick();
+        ChunkContainerRegistry.getInstance().tick();
     }
 
     @Listener

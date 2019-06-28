@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.block;
+package fr.redrelay.spongecreeperheal.healable;
 
 import org.spongepowered.api.data.DataSerializable;
 
