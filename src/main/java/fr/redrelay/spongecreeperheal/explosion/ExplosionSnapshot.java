@@ -1,73 +1,52 @@
 package fr.redrelay.spongecreeperheal.explosion;
 
-import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
-import org.spongepowered.api.data.*;
-import org.spongepowered.api.data.persistence.AbstractDataBuilder;
-import org.spongepowered.api.data.persistence.InvalidDataException;
+import com.flowpowered.math.vector.Vector3i;
+import fr.redrelay.spongecreeperheal.healable.Healable;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-/**
- * ExplosionSnapshot represent a memorized list of Healable after an Explosion.
- * All Healable of a ExplosionSnapshot should be on the same chunk
- * It means a multi chunk explosion create multiple ExplosionSnapshot for each chunk
- * Each HealTask ticks decrements first Healable of ExplosionSnapshot
- * When Healable timer reach 0, it is restored and dropped from the list
- * Empty ExplosionSnapshot must not be keep in memory to avoid leak
- */
-public class ExplosionSnapshot implements DataSerializable {
+//TODO : Must be serialisable, because it will be saved in world save (levelDB)
+//TODO : Unique indentifier my be human readable like "TNT-Player(RedRelay)-20190701:16:12:53:2351-1" with the last number the identifier of the current thread
+public class ExplosionSnapshot implements Healable {
 
-    private static class Keys {
-        final static DataQuery HEALABLES = DataQuery.of("entries");
+    //Null values are allowed, meaning chuck is not loaded
+    private final Map<Vector3i, Optional<? extends Healable>> chunkedExplosions = new HashMap<>();
+
+    public ExplosionSnapshot(Set<ChunkedExplosionSnapshot> chunkedExplosions){
+        this.chunkedExplosions.putAll(chunkedExplosions.stream().collect(Collectors.toMap(ChunkedExplosionSnapshot::getChunkPosition, Optional::of)));
     }
 
-    private final LinkedList<ChunkedHealable> entries = new LinkedList<>();
 
-    public ExplosionSnapshot(Collection<ChunkedHealable> entries){
-        this.entries.addAll(entries);
-    }
-
-    public LinkedList<ChunkedHealable> getEntries() {
-        return entries;
-    }
-
-    public void tick() {
-        entries.getFirst().decreaseRemainingTime();
-        if(entries.getFirst().getRemainingTime() == 0) {
-            entries.removeFirst().restore();
-        }
+    @Override
+    public void restore() {
+        //TODO
+        throw new RuntimeException("Not implemented yet");
     }
 
     @Override
-    public int getContentVersion() {
-        return 0;
+    public int getRemainingTime() {
+        //TODO
+        throw new RuntimeException("Not implemented yet");
     }
 
     @Override
-    public DataContainer toContainer() {
-        final DataContainer data = DataContainer.createNew();
-        data.set(Queries.CONTENT_VERSION, getContentVersion());
-        data.set(Keys.HEALABLES, entries);
-        return data;
+    public void setRemainingTime(int remainingTime) {
+        //TODO
+        throw new RuntimeException("Not implemented yet");
     }
 
-    /**
-     * Used to build ExplosionSnapshot
-     */
-    public static class Builder extends AbstractDataBuilder<ExplosionSnapshot> {
-
-        public Builder() {
-            super(ExplosionSnapshot.class, 0);
-        }
-
-        @Override
-        protected Optional<ExplosionSnapshot> buildContent(DataView data) throws InvalidDataException {
-            final List<ChunkedHealable> entries = data.getSerializableList(Keys.HEALABLES, ChunkedHealable.class)
-                    .orElseThrow(() -> new InvalidDataException(ExplosionSnapshot.class.getName()+" : Missing \"entries\" data"));
-            return Optional.of(new ExplosionSnapshot(entries));
-        }
+    @Override
+    public void decreaseRemainingTime() {
+        //TODO
+        throw new RuntimeException("Not implemented yet");
     }
+
+    @Override
+    public Map<Vector3i, Optional<? extends Healable>> splitByChunk() {
+        return this.chunkedExplosions;
+    }
+
+
 }

@@ -9,7 +9,7 @@ import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import fr.redrelay.spongecreeperheal.healable.Healable;
-import fr.redrelay.spongecreeperheal.healable.block.impl.SimpleHealableBlock;
+import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
 import org.slf4j.Logger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;

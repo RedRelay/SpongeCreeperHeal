@@ -1,9 +1,9 @@
-package fr.redrelay.spongecreeperheal.healable.block.impl;
+package fr.redrelay.spongecreeperheal.healable.atom.block.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-public class SimpleHealableBlock extends AbstractHealable implements ChunkedHealable {
+public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable {
 
     private static class Keys {
         final static DataQuery BLOCK_SNAPSHOT = DataQuery.of("blockSnapshot");
@@ -66,14 +66,9 @@ public class SimpleHealableBlock extends AbstractHealable implements ChunkedHeal
         return this.blockSnapshot.getLocation().get().getChunkPosition();
     }
 
-    @Override
-    public Collection<ChunkedHealable> split() {
-        return Collections.singletonList(this);
-    }
+    public static class DataBuilder extends AbstractDataBuilder<SimpleHealableBlock> {
 
-    public static class Builder extends AbstractDataBuilder<SimpleHealableBlock> {
-
-        public Builder() {
+        public DataBuilder() {
             super(SimpleHealableBlock.class, 0);
         }
 

@@ -91,12 +91,18 @@ public class ChunkContainer implements DataSerializable {
         return data;
     }
 
+    public static class Builder {
+
+
+        public ChunkContainer build() {}
+    }
+
     /**
      * Used to build ChunkContainer
      */
-    public static class Builder extends AbstractDataBuilder<ChunkContainer> {
+    public static class DataBuilder extends AbstractDataBuilder<ChunkContainer> {
 
-        public Builder() {
+        public DataBuilder() {
             super(ChunkContainer.class, 0);
         }
 

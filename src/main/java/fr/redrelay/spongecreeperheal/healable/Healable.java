@@ -1,13 +1,15 @@
 package fr.redrelay.spongecreeperheal.healable;
 
-import org.spongepowered.api.data.DataSerializable;
+import com.flowpowered.math.vector.Vector3i;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
-public interface Healable extends DataSerializable {
+public interface Healable {
     void restore();
     int getRemainingTime();
     void setRemainingTime(int remainingTime);
     void decreaseRemainingTime();
-    Collection<ChunkedHealable> split();
+    Map<Vector3i, Optional<? extends Healable>> splitByChunk();
 }
