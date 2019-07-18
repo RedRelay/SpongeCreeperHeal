@@ -6,17 +6,17 @@ import fr.redrelay.spongecreeperheal.healable.factory.provider.impl.SimpleHealab
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockType;
 
-public class HealableBlockFactory extends Registry<BlockType, BlockProvider<?>> implements BlockProvider<HealableBlock> {
+public class HealableBlockFactory extends Registry<BlockType, BlockProvider<? extends HealableBlock>> implements BlockProvider<HealableBlock> {
 
     private static final HealableBlockFactory INSTANCE = new HealableBlockFactory();
 
-    private final BlockProvider<?> DEFAULT_PROVIDER = new SimpleHealableBlockProvider();
+    private final BlockProvider<? extends HealableBlock> DEFAULT_PROVIDER = new SimpleHealableBlockProvider();
 
     private HealableBlockFactory() {}
 
     @Override
     public HealableBlock provide(BlockSnapshot block, BlockStateAccessor accessor) {
-        final BlockProvider<?> provider = this.getRegistred(block.getState().getType()).orElse(DEFAULT_PROVIDER);
+        final BlockProvider<? extends HealableBlock> provider = this.getRegistred(block.getState().getType()).orElse(DEFAULT_PROVIDER);
         return provider.provide(block, accessor);
     }
 
