@@ -1,10 +1,8 @@
 package fr.redrelay.spongecreeperheal.healable;
 
-import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
-import org.spongepowered.api.data.persistence.DataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
 
 import java.util.Optional;

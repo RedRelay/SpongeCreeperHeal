@@ -5,8 +5,8 @@ import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
 import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
-import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Used to create vine dependency models
  */
-public class VineDependencyFactory extends AbstractDependencyFactory {
+public class VineDependencyProvider extends AbstractDependencyProvider {
 
     /**
      * Only used to easyly access to isExceptBlockForAttaching from BlockVine which is protected
@@ -38,7 +38,7 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
         }
     }
 
-    public VineDependencyFactory(DependencyRule rule) {
+    public VineDependencyProvider(DependencyRule rule) {
         super(rule);
     }
 
@@ -51,13 +51,13 @@ public class VineDependencyFactory extends AbstractDependencyFactory {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posUp = blockSnapshot.getPosition().add(Direction.UP.asBlockOffset());
         final BlockState posUpBlock = index.get(posUp);
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
-            throw new ConnectedDirectionDependencyFactory.NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any "+ ConnectedDirectionData.class.getSimpleName() +" : "+blockSnapshot.getState().getType().getName());
+            throw new ConnectedDirectionDependencyProvider.NoConnectedDirectionException(this.getClass().getSimpleName()+" configured block state without any "+ ConnectedDirectionData.class.getSimpleName() +" : "+blockSnapshot.getState().getType().getName());
         }
 
         final Set<Direction> attachedTo = data.get().connectedDirections().get();

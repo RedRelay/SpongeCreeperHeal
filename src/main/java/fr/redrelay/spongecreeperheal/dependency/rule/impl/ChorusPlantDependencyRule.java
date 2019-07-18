@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.impl.ChorusPlantDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.factory.impl.ChorusPlantDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.BlockClassFilteredRule;
 import net.minecraft.block.BlockChorusPlant;
 import org.spongepowered.api.block.BlockType;
@@ -13,7 +13,7 @@ public class ChorusPlantDependencyRule extends BlockClassFilteredRule {
     }
 
     @Override
-    protected DependencyFactory getFactory(BlockType block) {
-        return new ChorusPlantDependencyFactory(this);
+    protected DependencyProvider getFactory(BlockType block) {
+        return new ChorusPlantDependencyProvider(this);
     }
 }

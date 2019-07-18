@@ -4,7 +4,7 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
-import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -18,9 +18,9 @@ import java.util.Optional;
 /**
  * Create fire dependency models
  */
-public class FireDependencyFactory extends AbstractDependencyFactory {
+public class FireDependencyProvider extends AbstractDependencyProvider {
 
-    public FireDependencyFactory(DependencyRule rule) {
+    public FireDependencyProvider(DependencyRule rule) {
         super(rule);
     }
 
@@ -31,7 +31,7 @@ public class FireDependencyFactory extends AbstractDependencyFactory {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
 
         final DependencyModel[] dependencies = Arrays.asList(Direction.values()).parallelStream()
                 .filter(Direction::isCardinal)

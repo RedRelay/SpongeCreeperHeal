@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.impl.DirectionalDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.factory.impl.DirectionalDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.BlockClassFilteredRule;
 import net.minecraft.block.Block;
 import org.spongepowered.api.block.BlockType;
@@ -20,7 +20,7 @@ public class DirectionalDependencyRule extends BlockClassFilteredRule {
     }
 
     @Override
-    protected DependencyFactory getFactory(BlockType block) {
-        return new DirectionalDependencyFactory(this, this.isOpposite);
+    protected DependencyProvider getFactory(BlockType block) {
+        return new DirectionalDependencyProvider(this, this.isOpposite);
     }
 }

@@ -2,7 +2,6 @@ package fr.redrelay.spongecreeperheal.healable;
 
 import com.flowpowered.math.vector.Vector3i;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 

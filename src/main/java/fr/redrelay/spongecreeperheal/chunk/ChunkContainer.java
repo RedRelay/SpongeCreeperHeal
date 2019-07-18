@@ -98,7 +98,7 @@ public class ChunkContainer implements DataSerializable {
     }
 
     /**
-     * Used to build ChunkContainer
+     * Used to provide ChunkContainer
      */
     public static class DataBuilder extends AbstractDataBuilder<ChunkContainer> {
 

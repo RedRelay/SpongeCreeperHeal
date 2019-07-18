@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.dependency.factory.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
-import fr.redrelay.spongecreeperheal.dependency.factory.ChorusDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.ChorusDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -13,9 +13,9 @@ import java.util.Optional;
 /**
  * Create dependency models for Chorus Flower
  */
-public class ChorusFlowerDependencyFactory extends ChorusDependencyFactory {
+public class ChorusFlowerDependencyProvider extends ChorusDependencyProvider {
 
-    public ChorusFlowerDependencyFactory(DependencyRule rule) {
+    public ChorusFlowerDependencyProvider(DependencyRule rule) {
         super(rule);
     }
 
@@ -27,8 +27,8 @@ public class ChorusFlowerDependencyFactory extends ChorusDependencyFactory {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
-        final Optional<DependencyModel<Vector3i>> optBlockDown = super.build(blockSnapshot, index);
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+        final Optional<DependencyModel<Vector3i>> optBlockDown = super.provide(blockSnapshot, index);
         if(optBlockDown.isPresent()) {
             return optBlockDown;
         }

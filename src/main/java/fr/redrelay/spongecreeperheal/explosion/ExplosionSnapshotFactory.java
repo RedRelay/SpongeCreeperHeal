@@ -6,7 +6,7 @@ import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 /**
  * All dependency related stuff are here
  * Rules registering
- * DependencyFactory registering
+ * DependencyProvider registering
  * Sorting BlockSnapshot
  */
 public class ExplosionSnapshotFactory {
     private static final ExplosionSnapshotFactory INSTANCE = new ExplosionSnapshotFactory();
 
     private final Logger logger = SpongeCreeperHeal.getLogger();
-    private final Map<BlockType, DependencyFactory> map = new HashMap<>();
+    private final Map<BlockType, DependencyProvider> map = new HashMap<>();
 
     private ExplosionSnapshotFactory() {}
 
@@ -60,7 +60,7 @@ public class ExplosionSnapshotFactory {
         return healables;
     }
 
-    public Optional<DependencyFactory> getDependencyFactory(BlockType block) {
+    public Optional<DependencyProvider> getDependencyFactory(BlockType block) {
         return Optional.ofNullable(map.get(block));
     }
 
@@ -69,12 +69,12 @@ public class ExplosionSnapshotFactory {
         rule.registerDependencies();
     }
 
-    public void register(BlockType block, DependencyFactory factory) {
+    public void register(BlockType block, DependencyProvider factory) {
         logger.info("Register dependency factory \"{}\" for block \"{}\"",factory.getClass().getName(), block.getName());
         map.put(block, factory);
     }
 
-    public Map<BlockType, DependencyFactory> getDependencyMap() {
+    public Map<BlockType, DependencyProvider> getDependencyMap() {
         return Collections.unmodifiableMap(map);
     }
 
@@ -86,9 +86,9 @@ public class ExplosionSnapshotFactory {
      * @return
      */
     private DependencyNode<Vector3i> convertToDependencyNodes(BlockSnapshot entry, Map<Vector3i, BlockState> indexedBlockStates) {
-        final Optional<DependencyFactory> optFactory = getDependencyFactory(entry.getState().getType());
+        final Optional<DependencyProvider> optFactory = getDependencyFactory(entry.getState().getType());
         if(optFactory.isPresent()) {
-            final Optional<DependencyModel<Vector3i>> optDependencyModel = optFactory.get().build(entry, indexedBlockStates);
+            final Optional<DependencyModel<Vector3i>> optDependencyModel = optFactory.get().provide(entry, indexedBlockStates);
             if(optDependencyModel.isPresent()) {
                 return new DependencyNode<>(entry.getPosition(), optDependencyModel.get());
             }

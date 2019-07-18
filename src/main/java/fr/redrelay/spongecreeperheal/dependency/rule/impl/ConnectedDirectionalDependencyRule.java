@@ -3,8 +3,8 @@ package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
-import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyFactory;
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.BlockClassFilteredRule;
 import net.minecraft.block.Block;
 import org.spongepowered.api.block.BlockType;
@@ -17,8 +17,8 @@ public class ConnectedDirectionalDependencyRule extends BlockClassFilteredRule {
     }
 
     @Override
-    protected DependencyFactory getFactory(BlockType block) {
-        return new ConnectedDirectionDependencyFactory(this) {
+    protected DependencyProvider getFactory(BlockType block) {
+        return new ConnectedDirectionDependencyProvider(this) {
             @Override
             protected DependencyModel<Vector3i> merge(DependencyModel<Vector3i>... dependencies) {
                 return new OrDependencyModel<>(dependencies);

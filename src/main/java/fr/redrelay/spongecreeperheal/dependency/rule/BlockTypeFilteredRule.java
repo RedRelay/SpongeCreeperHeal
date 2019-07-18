@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.dependency.rule;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshotFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
@@ -18,5 +18,5 @@ public abstract class BlockTypeFilteredRule implements DependencyRule {
     }
 
     protected abstract boolean matches(BlockType block);
-    protected abstract DependencyFactory getFactory(BlockType block);
+    protected abstract DependencyProvider getFactory(BlockType block);
 }

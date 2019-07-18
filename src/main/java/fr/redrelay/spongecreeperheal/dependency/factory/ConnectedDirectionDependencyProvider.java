@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Used to create Dependency models based on block having ConnectedDirectionData
  */
-public abstract class ConnectedDirectionDependencyFactory extends AbstractDependencyFactory {
+public abstract class ConnectedDirectionDependencyProvider extends AbstractDependencyProvider {
 
     public static class NoConnectedDirectionException extends RuntimeException {
         public NoConnectedDirectionException(String message) {
@@ -23,7 +23,7 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
         }
     }
 
-    public ConnectedDirectionDependencyFactory(DependencyRule rule) {
+    public ConnectedDirectionDependencyProvider(DependencyRule rule) {
         super(rule);
     }
 
@@ -35,7 +35,7 @@ public abstract class ConnectedDirectionDependencyFactory extends AbstractDepend
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {

@@ -18,9 +18,9 @@ import java.util.stream.Stream;
 /**
  * Regroup Chorus common dependency
  */
-public abstract class ChorusDependencyFactory extends AbstractDependencyFactory {
+public abstract class ChorusDependencyProvider extends AbstractDependencyProvider {
 
-    protected ChorusDependencyFactory(DependencyRule rule) {
+    protected ChorusDependencyProvider(DependencyRule rule) {
         super(rule);
     }
 
@@ -31,7 +31,7 @@ public abstract class ChorusDependencyFactory extends AbstractDependencyFactory 
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
         final Vector3i posDown = blockSnapshot.getPosition().add(Direction.DOWN.asBlockOffset());
         final BlockState blockDown = index.get(posDown);
         if(blockDown != null && (blockDown.getType().equals(BlockTypes.CHORUS_PLANT) || blockDown.getType().equals(BlockTypes.END_STONE))) {

@@ -3,8 +3,10 @@ package fr.redrelay.spongecreeperheal.explosion;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 //TODO : Must be serialisable, because it will be saved in world save (levelDB)

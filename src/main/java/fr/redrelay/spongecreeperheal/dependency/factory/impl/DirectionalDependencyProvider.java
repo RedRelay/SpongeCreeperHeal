@@ -4,7 +4,7 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * Used to create Dependency models based on block having DirectionalData
  */
-public class DirectionalDependencyFactory extends AbstractDependencyFactory {
+public class DirectionalDependencyProvider extends AbstractDependencyProvider {
 
     public static class NoDirectionalException extends RuntimeException {
         public NoDirectionalException(String message) {
@@ -28,7 +28,7 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
     /**
      * Used to created Dependency models based on hardcoded block having DirectionalData
      */
-    public static class Static extends DirectionalDependencyFactory {
+    public static class Static extends DirectionalDependencyProvider {
 
         private final Direction direction;
 
@@ -46,16 +46,16 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
     private final boolean isOpposite;
 
     /**
-     * Create a DirectionalDependencyFactory
+     * Create a DirectionalDependencyProvider
      * @param rule
      * @param isOpposite if you must get the opposite direction to have block offset
      */
-    public DirectionalDependencyFactory(DependencyRule rule, boolean isOpposite) {
+    public DirectionalDependencyProvider(DependencyRule rule, boolean isOpposite) {
         super(rule);
         this.isOpposite = isOpposite;
     }
 
-    public DirectionalDependencyFactory(DependencyRule rule) {
+    public DirectionalDependencyProvider(DependencyRule rule) {
         this(rule, false);
     }
 
@@ -66,7 +66,7 @@ public class DirectionalDependencyFactory extends AbstractDependencyFactory {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> build(BlockSnapshot currentBlock, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot currentBlock, Map<Vector3i, BlockState> index) {
         try {
             final Vector3i dependency = currentBlock.getPosition().add(getDirection(currentBlock.getState()).asBlockOffset());
             if (index.containsKey(dependency)) {

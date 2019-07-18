@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.GravityAffectedDependencyRule;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshotFactory;
 import net.minecraft.block.Block;
@@ -35,12 +35,12 @@ public class DependencyTracker {
 
     public DependencyTracker() {
         final Collection<BlockType> allBlocks = Sponge.getRegistry().getAllOf(BlockType.class);
-        final Map<BlockType, DependencyFactory> dependencyMap = ExplosionSnapshotFactory.getInstance().getDependencyMap();
+        final Map<BlockType, DependencyProvider> dependencyMap = ExplosionSnapshotFactory.getInstance().getDependencyMap();
         final Set<DependencyTrackerItem> tracker = new HashSet<>();
 
         allBlocks.forEach(blockType -> {
 
-            final Optional<DependencyFactory> factory = Optional.ofNullable(dependencyMap.get(blockType));
+            final Optional<DependencyProvider> factory = Optional.ofNullable(dependencyMap.get(blockType));
 
             if(DependencyTracker.hasDependencies(blockType)) {
 

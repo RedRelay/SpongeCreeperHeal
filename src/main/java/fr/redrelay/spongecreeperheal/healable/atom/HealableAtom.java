@@ -2,14 +2,10 @@ package fr.redrelay.spongecreeperheal.healable.atom;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
-import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataView;
-import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
-
-import java.util.Optional;
 
 public abstract class HealableAtom extends AbstractHealable {
 

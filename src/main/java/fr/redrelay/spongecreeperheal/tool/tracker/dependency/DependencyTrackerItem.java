@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyFactory;
+import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
 import org.spongepowered.api.block.BlockType;
 
 import java.util.Objects;
@@ -42,10 +42,10 @@ public final class DependencyTrackerItem implements Comparable<DependencyTracker
     }
 
     private final BlockType block;
-    private final Optional<DependencyFactory> dependencyFactory;
+    private final Optional<DependencyProvider> dependencyFactory;
     private final Status status;
 
-    protected DependencyTrackerItem(BlockType block, Optional<DependencyFactory> dependencyFactory, Status status) {
+    protected DependencyTrackerItem(BlockType block, Optional<DependencyProvider> dependencyFactory, Status status) {
         this.block = block;
         this.dependencyFactory = dependencyFactory;
         this.status = status;
@@ -55,7 +55,7 @@ public final class DependencyTrackerItem implements Comparable<DependencyTracker
         return block;
     }
 
-    public Optional<DependencyFactory> getDependencyFactory() {
+    public Optional<DependencyProvider> getDependencyFactory() {
         return dependencyFactory;
     }
 

@@ -8,7 +8,10 @@ import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * ExplosionSnapshot represent a memorized list of Healable after an Explosion.
@@ -79,7 +82,7 @@ public class ChunkedExplosionSnapshot implements Healable, ChunkedHealable, Data
     }
 
     /**
-     * Used to build ExplosionSnapshot
+     * Used to provide ExplosionSnapshot
      */
     public static class DataBuilder extends AbstractDataBuilder<ChunkedExplosionSnapshot> {
 
