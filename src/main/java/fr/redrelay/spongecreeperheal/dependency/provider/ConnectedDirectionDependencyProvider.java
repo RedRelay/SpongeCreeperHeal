@@ -1,15 +1,14 @@
-package fr.redrelay.spongecreeperheal.dependency.factory;
+package fr.redrelay.spongecreeperheal.dependency.provider;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
+import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
 import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
 
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,11 +30,11 @@ public abstract class ConnectedDirectionDependencyProvider extends AbstractDepen
      * Iterate over all direction matchning with ConnectedDirectionData of block explosion
      * Retains only when is contained into index
      * @param blockSnapshot
-     * @param index
+     * @param accessor
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
@@ -44,7 +43,8 @@ public abstract class ConnectedDirectionDependencyProvider extends AbstractDepen
 
         final DependencyModel[] dependencies = data.get().connectedDirections().get().parallelStream()
                     .map(direction -> blockSnapshot.getPosition().add(direction.asBlockOffset()))
-                    .filter(index::containsKey)
+                    .map(accessor::get)
+                    .filter(Optional::isPresent)
                     .map(BasicDependencyModel::createUniqueDependency)
                     .toArray(DependencyModel[]::new);
 

@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.dependency.rule;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshotFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;

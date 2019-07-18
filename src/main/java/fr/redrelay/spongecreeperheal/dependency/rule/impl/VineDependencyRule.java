@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
-import fr.redrelay.spongecreeperheal.dependency.factory.impl.VineDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.impl.VineDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.BlockClassFilteredRule;
 import net.minecraft.block.BlockVine;
 import org.spongepowered.api.block.BlockType;

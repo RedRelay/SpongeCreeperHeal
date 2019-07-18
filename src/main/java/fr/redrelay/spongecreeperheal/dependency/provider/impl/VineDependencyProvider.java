@@ -1,13 +1,14 @@
-package fr.redrelay.spongecreeperheal.dependency.factory.impl;
+package fr.redrelay.spongecreeperheal.dependency.provider.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
 import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
-import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyProvider;
-import fr.redrelay.spongecreeperheal.dependency.factory.ConnectedDirectionDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.ConnectedDirectionDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
+import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import org.spongepowered.api.block.BlockSnapshot;
@@ -18,7 +19,10 @@ import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnected
 import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
 import org.spongepowered.api.util.Direction;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,13 +51,13 @@ public class VineDependencyProvider extends AbstractDependencyProvider {
      * A custom solution has been developped
      * Create a Or dependency model to wait upside vine block or valid horizontal side block
      * @param blockSnapshot
-     * @param index
+     * @param accessor
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
         final Vector3i posUp = blockSnapshot.getPosition().add(Direction.UP.asBlockOffset());
-        final BlockState posUpBlock = index.get(posUp);
+        final Optional<BlockState> optPosUpBlock = accessor.get(posUp);
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
@@ -66,13 +70,13 @@ public class VineDependencyProvider extends AbstractDependencyProvider {
                 .filter(direction -> attachedTo.contains(direction))
                 .map(direction -> blockSnapshot.getPosition().add(direction.asBlockOffset()))
                 .filter(pos -> {
-                    final BlockState sideBlock = index.get(pos);
-                    return sideBlock != null && !VineAdapter.isExceptBlockForAttaching(sideBlock.getType());
+                    final Optional<BlockState> optSideBlock = accessor.get(pos);
+                    return optSideBlock.isPresent() && !VineAdapter.isExceptBlockForAttaching(optSideBlock.get().getType());
                 })
                 .map(BasicDependencyModel::createUniqueDependency)
                 .collect(Collectors.toList());
 
-        if(posUpBlock != null && posUpBlock.getType().equals(BlockTypes.VINE)) {
+        if(optPosUpBlock.isPresent() && optPosUpBlock.get().getType().equals(BlockTypes.VINE)) {
             dependencies.add(BasicDependencyModel.createUniqueDependency(posUp));
         }
 

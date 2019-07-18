@@ -6,7 +6,8 @@ import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.DependencyRegistry;
+import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
@@ -26,11 +27,8 @@ import java.util.stream.Collectors;
  * DependencyProvider registering
  * Sorting BlockSnapshot
  */
-public class ExplosionSnapshotFactory {
+public class ExplosionSnapshotFactory extends DependencyRegistry {
     private static final ExplosionSnapshotFactory INSTANCE = new ExplosionSnapshotFactory();
-
-    private final Logger logger = SpongeCreeperHeal.getLogger();
-    private final Map<BlockType, DependencyProvider> map = new HashMap<>();
 
     private ExplosionSnapshotFactory() {}
 
@@ -60,20 +58,6 @@ public class ExplosionSnapshotFactory {
         return healables;
     }
 
-    public Optional<DependencyProvider> getDependencyFactory(BlockType block) {
-        return Optional.ofNullable(map.get(block));
-    }
-
-    public void register(DependencyRule rule) {
-        logger.info("Register dependency rule \"{}\"",rule.getName());
-        rule.registerDependencies();
-    }
-
-    public void register(BlockType block, DependencyProvider factory) {
-        logger.info("Register dependency factory \"{}\" for block \"{}\"",factory.getClass().getName(), block.getName());
-        map.put(block, factory);
-    }
-
     public Map<BlockType, DependencyProvider> getDependencyMap() {
         return Collections.unmodifiableMap(map);
     }
@@ -86,9 +70,9 @@ public class ExplosionSnapshotFactory {
      * @return
      */
     private DependencyNode<Vector3i> convertToDependencyNodes(BlockSnapshot entry, Map<Vector3i, BlockState> indexedBlockStates) {
-        final Optional<DependencyProvider> optFactory = getDependencyFactory(entry.getState().getType());
-        if(optFactory.isPresent()) {
-            final Optional<DependencyModel<Vector3i>> optDependencyModel = optFactory.get().provide(entry, indexedBlockStates);
+        final Optional<DependencyProvider> optProvider = this.getRegistred(entry.getState().getType());
+        if(optProvider.isPresent()) {
+            final Optional<DependencyModel<Vector3i>> optDependencyModel = optProvider.get().provide(entry, indexedBlockStates);
             if(optDependencyModel.isPresent()) {
                 return new DependencyNode<>(entry.getPosition(), optDependencyModel.get());
             }

@@ -1,18 +1,18 @@
-package fr.redrelay.spongecreeperheal.dependency.factory.impl;
+package fr.redrelay.spongecreeperheal.dependency.provider.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.dependency.factory.AbstractDependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
+import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableDirectionalData;
 import org.spongepowered.api.data.manipulator.mutable.block.DirectionalData;
 import org.spongepowered.api.util.Direction;
 
-import java.util.Map;
 import java.util.Optional;
 /**
  * Used to create Dependency models based on block having DirectionalData
@@ -62,14 +62,15 @@ public class DirectionalDependencyProvider extends AbstractDependencyProvider {
     /**
      * Looks for the specified direction and retains it only if it is contained in index
      * @param currentBlock
-     * @param index
+     * @param accessor
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot currentBlock, Map<Vector3i, BlockState> index) {
+    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot currentBlock, BlockStateAccessor accessor) {
         try {
             final Vector3i dependency = currentBlock.getPosition().add(getDirection(currentBlock.getState()).asBlockOffset());
-            if (index.containsKey(dependency)) {
+            final Optional<BlockState> optDependencyBlockState = accessor.get(dependency);
+            if (optDependencyBlockState.isPresent()) {
                 return Optional.of(BasicDependencyModel.createUniqueDependency(dependency));
             }
         }catch(NoDirectionalException error) {

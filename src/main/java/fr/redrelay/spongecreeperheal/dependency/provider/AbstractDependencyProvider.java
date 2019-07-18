@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.dependency.factory;
+package fr.redrelay.spongecreeperheal.dependency.provider;
 
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
 

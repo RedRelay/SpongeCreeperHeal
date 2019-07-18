@@ -1,6 +1,6 @@
 package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
-import fr.redrelay.spongecreeperheal.dependency.factory.DependencyProvider;
+import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.GravityAffectedDependencyRule;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshotFactory;
 import net.minecraft.block.Block;
