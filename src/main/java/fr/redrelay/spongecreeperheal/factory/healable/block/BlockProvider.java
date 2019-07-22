@@ -1,6 +1,6 @@
-package fr.redrelay.spongecreeperheal.healable.factory.provider;
+package fr.redrelay.spongecreeperheal.factory.healable.block;
 
-import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 
 public interface BlockProvider<T> {

@@ -3,7 +3,7 @@ package fr.redrelay.dependency.model;
 import java.util.Collections;
 import java.util.Set;
 
-public class NoDependencyModel implements DependencyModel {
+public class NoDependencyModel<T> implements DependencyModel<T> {
 
     private final static NoDependencyModel INSTANCE = new NoDependencyModel();
 
@@ -15,7 +15,7 @@ public class NoDependencyModel implements DependencyModel {
     }
 
     @Override
-    public Set getDependencies() {
+    public Set<T> getDependencies() {
         return Collections.emptySet();
     }
 

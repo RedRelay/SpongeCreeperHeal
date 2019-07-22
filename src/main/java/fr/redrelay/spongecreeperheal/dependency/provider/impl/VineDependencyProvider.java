@@ -8,7 +8,7 @@ import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
 import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.provider.ConnectedDirectionDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import org.spongepowered.api.block.BlockSnapshot;

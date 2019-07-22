@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
 import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.GravityAffectedDependencyRule;
-import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshotFactory;
+import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

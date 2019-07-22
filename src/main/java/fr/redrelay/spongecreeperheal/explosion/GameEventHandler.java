@@ -3,6 +3,7 @@ package fr.redrelay.spongecreeperheal.explosion;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.*;
+import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;

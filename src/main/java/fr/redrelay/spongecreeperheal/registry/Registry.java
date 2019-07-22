@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.healable.factory;
+package fr.redrelay.spongecreeperheal.registry;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +8,10 @@ import java.util.Optional;
 public class Registry<K,V> {
 
     private final Map<K, V> registry = new HashMap<>();
+
+    protected void registerAll(Map<K, V> registry) {
+        this.registry.putAll(registry);
+    }
 
     public void register(K key, V value) {
         this.registry.put(key, value);

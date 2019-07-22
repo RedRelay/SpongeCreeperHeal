@@ -6,7 +6,7 @@ import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableDirectionalData;

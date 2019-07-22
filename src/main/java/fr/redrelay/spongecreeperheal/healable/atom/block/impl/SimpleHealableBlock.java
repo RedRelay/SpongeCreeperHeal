@@ -2,9 +2,11 @@ package fr.redrelay.spongecreeperheal.healable.atom.block.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
+import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -67,8 +69,8 @@ public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable
         return this.blockSnapshot.getLocation().get().getChunkPosition();
     }
     @Override
-    public Set<Vector3i> getBlockPositions() {
-        return Collections.singleton(this.blockSnapshot.getPosition());
+    public Set<BlockSnapshot> getBlockSnapshots() {
+        return Collections.singleton(this.blockSnapshot);
     }
 
 
@@ -81,6 +83,13 @@ public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable
         @Override
         protected Optional<SimpleHealableBlock> buildContent(DataView data) throws InvalidDataException {
             return Optional.of(new SimpleHealableBlock(data));
+        }
+    }
+
+    public static class Provider implements BlockProvider<SimpleHealableBlock> {
+        @Override
+        public SimpleHealableBlock provide(BlockSnapshot block, BlockStateAccessor accessor) {
+            return new SimpleHealableBlock(block);
         }
     }
 

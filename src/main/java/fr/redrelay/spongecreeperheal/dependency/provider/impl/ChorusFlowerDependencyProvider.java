@@ -4,7 +4,7 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.dependency.provider.ChorusDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.healable.factory.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 
 import java.util.Optional;

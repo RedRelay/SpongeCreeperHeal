@@ -1,12 +1,15 @@
-package fr.redrelay.spongecreeperheal.dependency;
+package fr.redrelay.spongecreeperheal.registry;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.healable.factory.Registry;
 import org.spongepowered.api.block.BlockType;
 
 public class DependencyRegistry extends Registry<BlockType, DependencyProvider> {
+
+    private final static DependencyRegistry INSTANCE = new DependencyRegistry();
+
+    private DependencyRegistry() {};
 
     public void register(DependencyRule rule) {
         SpongeCreeperHeal.getLogger().info("Register dependency rule \"{}\"",rule.getName());
@@ -19,4 +22,7 @@ public class DependencyRegistry extends Registry<BlockType, DependencyProvider> 
         super.register(block, factory);
     }
 
+    public static DependencyRegistry getInstance() {
+        return INSTANCE;
+    }
 }
