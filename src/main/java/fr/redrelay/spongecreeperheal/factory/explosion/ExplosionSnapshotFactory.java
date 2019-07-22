@@ -1,21 +1,20 @@
 package fr.redrelay.spongecreeperheal.factory.explosion;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyIterator;
 import fr.redrelay.dependency.DependencyNode;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
+import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.factory.dependency.DependencyFactory;
-import fr.redrelay.spongecreeperheal.factory.healable.block.HealableBlockFactory;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
-import fr.redrelay.spongecreeperheal.healable.Healable;
-import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
-import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.data.LocatableSnapshot;
 import org.spongepowered.api.event.world.ExplosionEvent;
+import org.spongepowered.api.world.BlockChangeFlags;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -35,36 +34,35 @@ public class ExplosionSnapshotFactory {
      * @param e
      * @return
      */
-    public LinkedList<Healable> build(ExplosionEvent.Detonate e) {
+    public ChunkedExplosionSnapshot build(ExplosionEvent.Detonate e) {
 
-        final BlockStateAccessor blockStateAccessor = new BlockStateAccessor(e);
+        final HealableBlockAccessor healableBlockAccessor = new HealableBlockAccessor(e);
 
-        final List<BlockSnapshot> blocks = e.getAffectedLocations().stream()
-                .filter(worldLocation -> worldLocation.getBlockType() != BlockTypes.AIR)
-                .map( worldLocation -> {
-                    //Save all block data in explosion, necessary to restore the block later
-                    final BlockSnapshot blockSnapshot = worldLocation.createSnapshot();
-                    return blockSnapshot;
-
-                }).collect(Collectors.toList());
-
-        final Collection<HealableBlock> healableBlocks = blocks.stream().collect(HashMap<Vector3i, HealableBlock>::new, (healableBlockIndex, blockSnapshot) -> {
-            if(healableBlockIndex.containsKey(blockSnapshot.getPosition())) return;
-            final HealableBlock healableBlock = HealableBlockFactory.getInstance().provide(blockSnapshot, blockStateAccessor);
-            healableBlockIndex.putAll(healableBlock.getBlockSnapshots().stream().collect(Collectors.toMap(LocatableSnapshot::getPosition, (pos) -> healableBlock)));
-        }, Map::putAll).values();
-
-
-        //Convert BlockSnapshot collection to a list of dependency node
-        final List<DependencyNode<Vector3i>> nodes = entries.parallelStream()
-                .map(entry -> DependencyFactory.getInstance().provide(entry, blockStateAccessor))
+        final List<DependencyNode<HealableBlock>> dependencyNodes = healableBlockAccessor.getHealableBlocks().stream()
+                .map(block -> DependencyFactory.getInstance().createDependencyNode(block, healableBlockAccessor))
                 .collect(Collectors.toList());
 
-        final DependencyIterator<Vector3i> it = new DependencyIterator<>(nodes);
-        final LinkedList<Healable> healables = new LinkedList<>();
-        it.forEachRemaining(pos -> healables.add(new SimpleHealableBlock(indexedBlockSnapshot.get(pos))));
+        accessor.getRegistry().keySet().forEach();
 
-        return healables;
+        final DependencyIterator<HealableBlock> it = new DependencyIterator<>(dependencyNodes);
+        final Collection<HealableBlock> healables = new LinkedList<>();
+        it.forEachRemaining(healables::add);
+
+        return new ChunkedExplosionSnapshot(healables);
+    }
+
+    private void removeBlocks(HealableBlockAccessor accessor) {
+
+        accessor.getHealableBlocks().stream().flatMap()
+
+        final List<Location<World>> affectedBlockLocations = e.getAffectedLocations().parallelStream()
+                .filter(worldLocation -> worldLocation.getBlockType() != BlockTypes.AIR)
+                .collect(Collectors.toList());
+
+        //Remove block to prevent item drop
+        affectedBlockLocations.forEach(worldLocation -> worldLocation.setBlockType(BlockTypes.AIR, BlockChangeFlags.NONE));
+        //Update blocks physics
+        affectedBlockLocations.forEach(worldLocation -> worldLocation.setBlockType(BlockTypes.AIR));
     }
 
     public static ExplosionSnapshotFactory getInstance() { return INSTANCE; }

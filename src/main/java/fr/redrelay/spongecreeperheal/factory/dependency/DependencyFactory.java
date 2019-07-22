@@ -1,13 +1,12 @@
 package fr.redrelay.spongecreeperheal.factory.dependency;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyNode;
+import fr.redrelay.dependency.model.AndDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.NoDependencyModel;
-import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
-import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import fr.redrelay.spongecreeperheal.registry.DependencyRegistry;
 import org.spongepowered.api.block.BlockSnapshot;
 
@@ -22,9 +21,9 @@ public class DependencyFactory {
 
     private DependencyFactory() {}
 
-    public DependencyNode<HealableBlock> createDependencyNode(HealableBlock block, BlockStateAccessor accessor) {
+    public DependencyNode<HealableBlock> createDependencyNode(HealableBlock block, HealableBlockAccessor accessor) {
 
-        final List<DependencyModel<Vector3i>> dependencies = block.getBlockSnapshots().stream().collect(ArrayList<DependencyModel<Vector3i>>::new, (list, blockSnapshot) -> {
+        final List<DependencyModel<HealableBlock>> dependencies = block.getBlockSnapshots().values().stream().collect(ArrayList<DependencyModel<HealableBlock>>::new, (list, blockSnapshot) -> {
             createDependencyNode(blockSnapshot, accessor).ifPresent(list::add);
         }, ArrayList::addAll);
 
@@ -36,11 +35,12 @@ public class DependencyFactory {
             return new DependencyNode<HealableBlock>(block, dependencies.get(0));
         }
 
+       return new DependencyNode<>(block, new AndDependencyModel<>(dependencies.toArray(new DependencyModel[dependencies.size()])));
 
     }
 
-    private Optional<DependencyModel<Vector3i>> createDependencyNode(BlockSnapshot block, BlockStateAccessor accessor) {
-        final Optional<DependencyProvider> optProvider = DependencyRegistry.getInstance().getRegistred(block.getState().getType());
+    private Optional<DependencyModel<HealableBlock>> createDependencyNode(BlockSnapshot block, HealableBlockAccessor accessor) {
+        final Optional<DependencyProvider> optProvider = DependencyRegistry.getInstance().get(block.getState().getType());
         if(optProvider.isPresent()) {
             return optProvider.get().provide(block, accessor);
         }

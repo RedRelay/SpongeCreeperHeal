@@ -4,15 +4,15 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
 import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.provider.ConnectedDirectionDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
@@ -55,9 +55,9 @@ public class VineDependencyProvider extends AbstractDependencyProvider {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
+    public Optional<DependencyModel<HealableBlock>> provide(BlockSnapshot blockSnapshot, HealableBlockAccessor accessor) {
         final Vector3i posUp = blockSnapshot.getPosition().add(Direction.UP.asBlockOffset());
-        final Optional<BlockState> optPosUpBlock = accessor.get(posUp);
+        final Optional<HealableBlock> optPosUpBlock = accessor.get(posUp);
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
@@ -66,18 +66,19 @@ public class VineDependencyProvider extends AbstractDependencyProvider {
 
         final Set<Direction> attachedTo = data.get().connectedDirections().get();
 
-        final List<DependencyModel<Vector3i>> dependencies = Arrays.asList(DirectionAdapter.HORIZONTAL).stream()
-                .filter(direction -> attachedTo.contains(direction))
+        final List<DependencyModel<HealableBlock>> dependencies = Arrays.stream(DirectionAdapter.HORIZONTAL)
+                .filter(attachedTo::contains)
                 .map(direction -> blockSnapshot.getPosition().add(direction.asBlockOffset()))
                 .filter(pos -> {
-                    final Optional<BlockState> optSideBlock = accessor.get(pos);
-                    return optSideBlock.isPresent() && !VineAdapter.isExceptBlockForAttaching(optSideBlock.get().getType());
+                    final Optional<HealableBlock> optSideBlock = accessor.get(pos);
+                    return optSideBlock.isPresent() && !VineAdapter.isExceptBlockForAttaching(optSideBlock.get().getBlockSnapshots().get(pos).getState().getType());
                 })
+                .map(pos -> accessor.get(pos).get())
                 .map(BasicDependencyModel::createUniqueDependency)
                 .collect(Collectors.toList());
 
-        if(optPosUpBlock.isPresent() && optPosUpBlock.get().getType().equals(BlockTypes.VINE)) {
-            dependencies.add(BasicDependencyModel.createUniqueDependency(posUp));
+        if(optPosUpBlock.isPresent() && optPosUpBlock.get().getBlockSnapshots().get(posUp).getState().getType().equals(BlockTypes.VINE)) {
+            dependencies.add(BasicDependencyModel.createUniqueDependency(optPosUpBlock.get()));
         }
 
         if(dependencies.isEmpty()) {

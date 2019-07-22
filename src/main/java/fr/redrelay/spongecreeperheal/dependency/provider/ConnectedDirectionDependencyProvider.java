@@ -3,8 +3,9 @@ package fr.redrelay.spongecreeperheal.dependency.provider;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
 import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
@@ -34,7 +35,7 @@ public abstract class ConnectedDirectionDependencyProvider extends AbstractDepen
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
+    public Optional<DependencyModel<HealableBlock>> provide(BlockSnapshot blockSnapshot, HealableBlockAccessor accessor) {
 
         final Optional<ImmutableConnectedDirectionData> data = blockSnapshot.getState().get(ImmutableConnectedDirectionData.class);
         if(!data.isPresent() || !data.get().connectedDirections().exists()) {
@@ -65,5 +66,5 @@ public abstract class ConnectedDirectionDependencyProvider extends AbstractDepen
      * @param dependencies
      * @return
      */
-    protected abstract DependencyModel<Vector3i> merge(DependencyModel<Vector3i>... dependencies);
+    protected abstract DependencyModel<HealableBlock> merge(DependencyModel<Vector3i>... dependencies);
 }

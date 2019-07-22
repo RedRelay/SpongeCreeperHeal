@@ -2,11 +2,10 @@ package fr.redrelay.spongecreeperheal.healable.atom.block.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
+import fr.redrelay.spongecreeperheal.accessor.impl.BlockSnapshotAccessor;
+import fr.redrelay.spongecreeperheal.factory.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
-import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -16,10 +15,10 @@ import org.spongepowered.api.data.persistence.InvalidDataException;
 import org.spongepowered.api.world.BlockChangeFlags;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
-public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable, HealableBlock {
+public class SimpleHealableBlock extends HealableBlock implements ChunkedHealable {
 
     private static class Keys {
         final static DataQuery BLOCK_SNAPSHOT = DataQuery.of("blockSnapshot");
@@ -69,8 +68,8 @@ public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable
         return this.blockSnapshot.getLocation().get().getChunkPosition();
     }
     @Override
-    public Set<BlockSnapshot> getBlockSnapshots() {
-        return Collections.singleton(this.blockSnapshot);
+    public Map<Vector3i, BlockSnapshot> getBlockSnapshots() {
+        return Collections.singletonMap(this.blockSnapshot.getPosition(), this.blockSnapshot);
     }
 
 
@@ -86,9 +85,9 @@ public class SimpleHealableBlock extends HealableAtom implements ChunkedHealable
         }
     }
 
-    public static class Provider implements BlockProvider<SimpleHealableBlock> {
+    public static class Provider implements BlockProvider<BlockSnapshotAccessor, HealableBlock> {
         @Override
-        public SimpleHealableBlock provide(BlockSnapshot block, BlockStateAccessor accessor) {
+        public HealableBlock provide(BlockSnapshot block, BlockSnapshotAccessor accessor) {
             return new SimpleHealableBlock(block);
         }
     }

@@ -1,11 +1,11 @@
 package fr.redrelay.spongecreeperheal.dependency.provider.impl;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.dependency.provider.ChorusDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
 
 import java.util.Optional;
@@ -27,8 +27,8 @@ public class ChorusPlantDependencyProvider extends ChorusDependencyProvider {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
-        final Optional<DependencyModel<Vector3i>> optBlockDown = super.provide(blockSnapshot, accessor);
+    public Optional<DependencyModel<HealableBlock>> provide(BlockSnapshot blockSnapshot, HealableBlockAccessor accessor) {
+        final Optional<DependencyModel<HealableBlock>> optBlockDown = super.provide(blockSnapshot, accessor);
         if(optBlockDown.isPresent()) {
             return optBlockDown;
         }
@@ -44,6 +44,6 @@ public class ChorusPlantDependencyProvider extends ChorusDependencyProvider {
             return Optional.of(sideDependencies[0]);
         }
 
-        return Optional.of(new OrDependencyModel<Vector3i>(sideDependencies));
+        return Optional.of(new OrDependencyModel<HealableBlock>(sideDependencies));
     }
 }

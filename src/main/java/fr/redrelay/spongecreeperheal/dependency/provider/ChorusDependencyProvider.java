@@ -3,11 +3,11 @@ package fr.redrelay.spongecreeperheal.dependency.provider;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.adapter.DirectionAdapter;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.util.Direction;
@@ -32,13 +32,13 @@ public abstract class ChorusDependencyProvider extends AbstractDependencyProvide
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
+    public Optional<DependencyModel<HealableBlock>> provide(BlockSnapshot blockSnapshot, HealableBlockAccessor accessor) {
         final Vector3i posDown = blockSnapshot.getPosition().add(Direction.DOWN.asBlockOffset());
-        final Optional<BlockState> optBlockDown = accessor.get(posDown);
+        final Optional<HealableBlock> optBlockDown = accessor.get(posDown);
         if(optBlockDown.isPresent()) {
-            final BlockType blockType = optBlockDown.get().getType();
+            final BlockType blockType = optBlockDown.get().getBlockSnapshots().get(posDown).getState().getType();
             if(blockType.equals(BlockTypes.CHORUS_PLANT) || blockType.equals(BlockTypes.END_STONE)) {
-                return Optional.of(BasicDependencyModel.createUniqueDependency(posDown));
+                return Optional.of(BasicDependencyModel.createUniqueDependency(optBlockDown.get()));
             }
         }
         return Optional.empty();
@@ -50,13 +50,14 @@ public abstract class ChorusDependencyProvider extends AbstractDependencyProvide
      * @param accessor
      * @return
      */
-    protected Stream<DependencyModel<Vector3i>> sideDependencyStream(BlockSnapshot blockSnapshot, BlockStateAccessor accessor) {
-        return  Arrays.asList(DirectionAdapter.HORIZONTAL).stream()
+    protected Stream<DependencyModel<HealableBlock>> sideDependencyStream(BlockSnapshot blockSnapshot, HealableBlockAccessor accessor) {
+        return  Arrays.stream(DirectionAdapter.HORIZONTAL)
                 .map(direction -> blockSnapshot.getPosition().add(direction.asBlockOffset()))
                 .filter(pos -> {
-                    final Optional<BlockState> optBlockState = accessor.get(pos);
-                    return optBlockState.isPresent() && optBlockState.get().getType().equals(BlockTypes.CHORUS_PLANT);
+                    final Optional<HealableBlock> optHealableBlock = accessor.get(pos);
+                    return optHealableBlock.isPresent() && optHealableBlock.get().getBlockSnapshots().get(pos).getState().getType().equals(BlockTypes.CHORUS_PLANT);
                 })
+                .map(pos -> accessor.get(pos).get())
                 .map(BasicDependencyModel::createUniqueDependency);
     }
 

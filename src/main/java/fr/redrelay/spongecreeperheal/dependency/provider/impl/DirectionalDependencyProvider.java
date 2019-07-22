@@ -4,9 +4,10 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.dependency.provider.AbstractDependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.DependencyRule;
-import fr.redrelay.spongecreeperheal.registry.accessor.BlockStateAccessor;
+import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableDirectionalData;
@@ -66,12 +67,12 @@ public class DirectionalDependencyProvider extends AbstractDependencyProvider {
      * @return
      */
     @Override
-    public Optional<DependencyModel<Vector3i>> provide(BlockSnapshot currentBlock, BlockStateAccessor accessor) {
+    public Optional<DependencyModel<HealableBlock>> provide(BlockSnapshot currentBlock, HealableBlockAccessor accessor) {
         try {
             final Vector3i dependency = currentBlock.getPosition().add(getDirection(currentBlock.getState()).asBlockOffset());
-            final Optional<BlockState> optDependencyBlockState = accessor.get(dependency);
-            if (optDependencyBlockState.isPresent()) {
-                return Optional.of(BasicDependencyModel.createUniqueDependency(dependency));
+            final Optional<HealableBlock> optDependency = accessor.get(dependency);
+            if (optDependency.isPresent()) {
+                return Optional.of(BasicDependencyModel.createUniqueDependency(optDependency.get()));
             }
         }catch(NoDirectionalException error) {
             SpongeCreeperHeal.getLogger().warn(error.getMessage());

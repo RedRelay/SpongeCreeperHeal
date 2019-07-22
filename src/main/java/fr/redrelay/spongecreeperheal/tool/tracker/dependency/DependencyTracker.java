@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.tool.tracker.dependency;
 
 import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.GravityAffectedDependencyRule;
-import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
+import fr.redrelay.spongecreeperheal.registry.DependencyRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +35,7 @@ public class DependencyTracker {
 
     public DependencyTracker() {
         final Collection<BlockType> allBlocks = Sponge.getRegistry().getAllOf(BlockType.class);
-        final Map<BlockType, DependencyProvider> dependencyMap = ExplosionSnapshotFactory.getInstance().getDependencyMap();
+        final Map<BlockType, DependencyProvider> dependencyMap = DependencyRegistry.getInstance().getRegistry();
         final Set<DependencyTrackerItem> tracker = new HashSet<>();
 
         allBlocks.forEach(blockType -> {
@@ -95,16 +95,15 @@ public class DependencyTracker {
     }
 
     public void createMarkdown(File file) throws IOException {
-        final PrintWriter writer = new PrintWriter(new FileWriter(file));
-        try {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             this.items.stream().sorted().forEachOrdered(item -> {
 
                 final StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append("* [");
-                if(item.getStatus().isDependencyImplemented()) {
+                if (item.getStatus().isDependencyImplemented()) {
                     stringBuilder.append('x');
-                }else {
+                } else {
                     stringBuilder.append(' ');
                 }
                 stringBuilder.append("] ");
@@ -125,8 +124,6 @@ public class DependencyTracker {
 
                 writer.println(stringBuilder.toString());
             });
-        }finally {
-            if(writer != null) writer.close();
         }
     }
 }

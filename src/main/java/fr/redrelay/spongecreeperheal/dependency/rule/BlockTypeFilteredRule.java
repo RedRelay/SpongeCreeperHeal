@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.dependency.rule;
 
 import fr.redrelay.spongecreeperheal.dependency.provider.DependencyProvider;
-import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
+import fr.redrelay.spongecreeperheal.registry.DependencyRegistry;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 
@@ -14,7 +14,7 @@ public abstract class BlockTypeFilteredRule implements DependencyRule {
         final Collection<BlockType> blocks = Sponge.getRegistry().getAllOf(BlockType.class);
         blocks.parallelStream()
                 .filter(this::matches)
-                .forEach(block -> ExplosionSnapshotFactory.getInstance().register(block, getFactory(block)));
+                .forEach(block -> DependencyRegistry.getInstance().register(block, getFactory(block)));
     }
 
     protected abstract boolean matches(BlockType block);

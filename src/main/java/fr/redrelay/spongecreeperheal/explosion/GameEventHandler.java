@@ -3,7 +3,7 @@ package fr.redrelay.spongecreeperheal.explosion;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;
 import fr.redrelay.spongecreeperheal.dependency.rule.impl.*;
-import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
+import fr.redrelay.spongecreeperheal.registry.DependencyRegistry;
 import fr.redrelay.spongecreeperheal.tool.tracker.dependency.DependencyTracker;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -26,15 +26,15 @@ public class GameEventHandler {
      */
     @Listener
     public void registerDependencyBlocks(GamePostInitializationEvent e) {
-        final ExplosionSnapshotFactory explosionSnapshotFactory = ExplosionSnapshotFactory.getInstance();
-        explosionSnapshotFactory.register(new GravityAffectedDependencyRule());
-        MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DownLayedDependencyRule(blockClass)));
-        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DirectionalDependencyRule(blockClass, true)));
-        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> explosionSnapshotFactory.register(new DirectionalDependencyRule(blockClass)));
-        explosionSnapshotFactory.register(new VineDependencyRule());
-        explosionSnapshotFactory.register(new ChorusPlantDependencyRule());
-        explosionSnapshotFactory.register(new ChorusFlowerDependencyRule());
-        explosionSnapshotFactory.register(new FireDependencyRule());
+        final DependencyRegistry dependencyRegistry = DependencyRegistry.getInstance();
+        dependencyRegistry.register(new GravityAffectedDependencyRule());
+        MinecraftAdapter.getInstance().getDownLayedBlocks().forEach(blockClass -> dependencyRegistry.register(new DownLayedDependencyRule(blockClass)));
+        MinecraftAdapter.getInstance().getOppositeFacingLayedBlocks().forEach(blockClass -> dependencyRegistry.register(new DirectionalDependencyRule(blockClass, true)));
+        MinecraftAdapter.getInstance().getFacingLayedBlocks().forEach(blockClass -> dependencyRegistry.register(new DirectionalDependencyRule(blockClass)));
+        dependencyRegistry.register(new VineDependencyRule());
+        dependencyRegistry.register(new ChorusPlantDependencyRule());
+        dependencyRegistry.register(new ChorusFlowerDependencyRule());
+        dependencyRegistry.register(new FireDependencyRule());
 
         SpongeCreeperHeal.getConfig().ifPresent(config -> {
             Optional<String> optFilePath = Optional.empty();
