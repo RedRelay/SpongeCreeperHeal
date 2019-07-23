@@ -4,11 +4,12 @@ import com.flowpowered.math.vector.Vector3i;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface Healable {
     void restore();
     int getRemainingTime();
     void setRemainingTime(int remainingTime);
     void decreaseRemainingTime();
-    Map<Vector3i, Optional<? extends Healable>> splitByChunk();
+    Set<Vector3i> getChunks();
 }

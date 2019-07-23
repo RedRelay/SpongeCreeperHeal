@@ -2,8 +2,7 @@ package fr.redrelay.spongecreeperheal.healable.atom.block.impl;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.accessor.impl.BlockSnapshotAccessor;
-import fr.redrelay.spongecreeperheal.factory.BlockProvider;
+import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
@@ -85,9 +84,9 @@ public class SimpleHealableBlock extends HealableBlock implements ChunkedHealabl
         }
     }
 
-    public static class Provider implements BlockProvider<BlockSnapshotAccessor, HealableBlock> {
+    public static class Provider implements BlockProvider<HealableBlock> {
         @Override
-        public HealableBlock provide(BlockSnapshot block, BlockSnapshotAccessor accessor) {
+        public HealableBlock provide(BlockSnapshot block) {
             return new SimpleHealableBlock(block);
         }
     }

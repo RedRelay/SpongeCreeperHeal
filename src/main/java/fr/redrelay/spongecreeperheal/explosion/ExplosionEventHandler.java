@@ -21,9 +21,8 @@ public class ExplosionEventHandler {
     @Listener
     public void onDetonate(ExplosionEvent.Detonate e) {
 
-        final LinkedList<Healable> healables = ExplosionSnapshotFactory.getInstance().build(e);
+        final ExplosionSnapshot explosionSnapshot = ExplosionSnapshotFactory.getInstance().build(e);
 
-        this.removeBlocks(e);
 
         //TODO : ScheduleService
         healables.parallelStream()

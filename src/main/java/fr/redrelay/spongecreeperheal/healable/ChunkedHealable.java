@@ -5,11 +5,12 @@ import com.flowpowered.math.vector.Vector3i;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ChunkedHealable extends Healable {
     Vector3i getChunkPosition();
 
-    default Map<Vector3i, Optional<? extends Healable>> splitByChunk() {
-        return Collections.singletonMap(getChunkPosition(), Optional.of(this));
+    default Set<Vector3i> getChunks() {
+        return Collections.singleton(getChunkPosition());
     }
 }

@@ -1,20 +1,25 @@
 package fr.redrelay.spongecreeperheal.factory.explosion;
 
+import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyIterator;
 import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
 import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.factory.dependency.DependencyFactory;
+import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.Healable;
+import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.LocatableSnapshot;
 import org.spongepowered.api.event.world.ExplosionEvent;
 import org.spongepowered.api.world.BlockChangeFlags;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -34,35 +39,55 @@ public class ExplosionSnapshotFactory {
      * @param e
      * @return
      */
-    public ChunkedExplosionSnapshot build(ExplosionEvent.Detonate e) {
+    public ExplosionSnapshot build(ExplosionEvent.Detonate e) {
 
-        final HealableBlockAccessor healableBlockAccessor = new HealableBlockAccessor(e);
+        final HealableBlockAccessor accessor = new HealableBlockAccessor(e);
 
-        final List<DependencyNode<HealableBlock>> dependencyNodes = healableBlockAccessor.getHealableBlocks().stream()
-                .map(block -> DependencyFactory.getInstance().createDependencyNode(block, healableBlockAccessor))
-                .collect(Collectors.toList());
+        this.removeBlocks(accessor.getHealableBlocks());
 
-        accessor.getRegistry().keySet().forEach();
+        final List<DependencyNode<HealableBlock>> dependencyNodes = createDependencyNodes(accessor);
 
-        final DependencyIterator<HealableBlock> it = new DependencyIterator<>(dependencyNodes);
-        final Collection<HealableBlock> healables = new LinkedList<>();
-        it.forEachRemaining(healables::add);
+        final List<HealableBlock> healableBlocks = getSortedHealableBlocks(dependencyNodes);
 
-        return new ChunkedExplosionSnapshot(healables);
+        final Set<ChunkedExplosionSnapshot> chunkedExplosionSnapshots = createChunkedExplosionSnapshot(healableBlocks);
+
+        return new ExplosionSnapshot(chunkedExplosionSnapshots);
     }
 
-    private void removeBlocks(HealableBlockAccessor accessor) {
+    private void removeBlocks(Collection<? extends HealableBlock> healableBlocks) {
 
-        accessor.getHealableBlocks().stream().flatMap()
-
-        final List<Location<World>> affectedBlockLocations = e.getAffectedLocations().parallelStream()
-                .filter(worldLocation -> worldLocation.getBlockType() != BlockTypes.AIR)
+        final List<Location<World>> affectedBlockLocations = healableBlocks.stream()
+                .flatMap(a -> a.getBlockSnapshots().values().stream())
+                .map(LocatableSnapshot::getLocation)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
 
         //Remove block to prevent item drop
         affectedBlockLocations.forEach(worldLocation -> worldLocation.setBlockType(BlockTypes.AIR, BlockChangeFlags.NONE));
         //Update blocks physics
         affectedBlockLocations.forEach(worldLocation -> worldLocation.setBlockType(BlockTypes.AIR));
+    }
+
+    private List<DependencyNode<HealableBlock>> createDependencyNodes(HealableBlockAccessor accessor) {
+        return accessor.getHealableBlocks().stream()
+                .map(block -> DependencyFactory.getInstance().createDependencyNode(block, accessor))
+                .collect(Collectors.toList());
+    }
+
+    private List<HealableBlock> getSortedHealableBlocks(List<DependencyNode<HealableBlock>> dependencyNodes) {
+        final DependencyIterator<HealableBlock> it = new DependencyIterator<>(dependencyNodes);
+        final List<HealableBlock> healables = new LinkedList<>();
+        it.forEachRemaining(healables::add);
+        return healables;
+    }
+
+    private Set<ChunkedExplosionSnapshot> createChunkedExplosionSnapshot(List<? extends HealableAtom> healables) {
+        //TODO : ScheduleService
+        final Map<Vector3i, List<HealableAtom>> chunkedHealables = healables.parallelStream()
+                .flatMap(healable -> healable.getChunks().parallelStream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.toList())));
+        return null;
     }
 
     public static ExplosionSnapshotFactory getInstance() { return INSTANCE; }
