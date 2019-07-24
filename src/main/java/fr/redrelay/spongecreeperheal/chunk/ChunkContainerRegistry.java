@@ -1,9 +1,11 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
 import org.slf4j.Logger;
 import org.spongepowered.api.world.Chunk;
+import org.spongepowered.api.world.World;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,17 +38,38 @@ public class ChunkContainerRegistry {
      * Adds a new ExplosionSnapshot to a Chunk
      * If Chunk already contains a ChunkContainer it is added to it
      * Else it is created then registered
-     * @param chunk
+     * @param world
      * @param explosion
      */
-    public void add(Chunk chunk, ExplosionSnapshot explosion) {
+    public void add(World world, ExplosionSnapshot explosion) {
+        explosion.getChunks().forEach(chunkPos -> {
+            final Optional<Chunk> optChunk = world.getChunk(chunkPos);
+            final Optional<ChunkedExplosionSnapshot> optChunkedExplosionSnapshot = explosion.getChunkedExplosion(chunkPos);
+
+            if(!optChunk.isPresent()) {
+                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : chunk seems not to be loaded", ChunkedExplosionSnapshot.class.getSimpleName(), chunkPos);
+                return;
+            }
+
+            if(!optChunkedExplosionSnapshot.isPresent()) {
+                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : {} is not loaded", ChunkedExplosionSnapshot.class.getSimpleName(), chunkPos, ChunkedExplosionSnapshot.class.getSimpleName());
+                return;
+            }
+
+            add(optChunk.get(), optChunkedExplosionSnapshot.get());
+        });
+
+
+    }
+
+    private void add(Chunk chunk, ChunkedExplosionSnapshot chunkedExplosionSnapshot) {
         final Optional<ChunkContainer> healableChunk = this.get(chunk.getUniqueId());
         if(healableChunk.isPresent()) {
             logger.debug("Adding a new explosion to an existing {} {}", ChunkContainer.class.getSimpleName(), healableChunk.get().getChunkPos().toString());
-            healableChunk.get().getExplosions().add(explosion);
+            healableChunk.get().getExplosions().add(chunkedExplosionSnapshot);
         }else {
             logger.debug("Adding a new explosion to a new {} {}", ChunkContainer.class.getSimpleName(), chunk.getPosition().toString());
-            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld().getName(), chunk.getPosition(), explosion));
+            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld().getName(), chunk.getPosition(), chunkedExplosionSnapshot));
         }
     }
 

@@ -2,7 +2,9 @@ package fr.redrelay.spongecreeperheal.chunk;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.healable.Healable;
 import org.slf4j.Logger;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
@@ -26,18 +28,18 @@ public class ChunkContainer implements DataSerializable {
 
     private static Logger logger = SpongeCreeperHeal.getLogger();
 
-    private final List<ExplosionSnapshot> explosions = new LinkedList<>();
+    private final List<ChunkedExplosionSnapshot> explosions = new LinkedList<>();
     protected String worldName;
     protected Vector3i chunkPos;
 
-    private ChunkContainer(Collection<ExplosionSnapshot> explosions) {
+    private ChunkContainer(Collection<? extends ChunkedExplosionSnapshot> explosions) {
         if(explosions.isEmpty()) {
             throw new RuntimeException(ChunkContainer.class.getSimpleName()+" must contains at least one explosion to heal");
         }
         this.explosions.addAll(explosions);
     }
 
-    protected ChunkContainer(String worldName, Vector3i chunkPos, ExplosionSnapshot explosion) {
+    protected ChunkContainer(String worldName, Vector3i chunkPos, ChunkedExplosionSnapshot explosion) {
         this.worldName = worldName;
         this.chunkPos = chunkPos;
         this.explosions.add(explosion);
@@ -69,13 +71,13 @@ public class ChunkContainer implements DataSerializable {
         return worldName != null && chunkPos != null;
     }
 
-    public List<ExplosionSnapshot> getExplosions() {
+    public List<ChunkedExplosionSnapshot> getExplosions() {
         return explosions;
     }
 
     public void tick() {
-        explosions.forEach(ExplosionSnapshot::tick);
-        explosions.removeAll(explosions.parallelStream().filter(e -> e.getEntries().isEmpty()).collect(Collectors.toList()));
+        explosions.forEach(Healable::decreaseRemainingTime);
+        explosions.removeAll(explosions.parallelStream().filter(e -> e.getHealableAtoms().isEmpty()).collect(Collectors.toList()));
     }
 
     @Override
