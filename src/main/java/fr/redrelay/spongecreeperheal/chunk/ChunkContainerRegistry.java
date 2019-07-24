@@ -19,7 +19,7 @@ public class ChunkContainerRegistry {
 
     private final Logger logger = SpongeCreeperHeal.getLogger();
 
-    private ChunkContainerRegistry(){};
+    private ChunkContainerRegistry(){}
 
     /**
      * Returns a loaded ChunkContainer by its UUID

@@ -23,12 +23,10 @@ public class ExplosionEventHandler {
 
         final ExplosionSnapshot explosionSnapshot = ExplosionSnapshotFactory.getInstance().build(e);
 
+        explosionSnapshot.getChunks().stream().map(explosionSnapshot::getChunkedExplosion).forEach(opt -> {
+            ChunkContainerRegistry.getInstance().add(opt.get());
+        });
 
-        //TODO : ScheduleService
-        healables.parallelStream()
-                .flatMap(healable -> healable.split().parallelStream())
-                .collect(Collectors.groupingBy(ChunkedHealable::getChunkPosition, Collectors.toCollection(LinkedList::new)))
-                .forEach((chunkPos, chunkedHealables) -> ChunkContainerRegistry.getInstance().add(e.getTargetWorld().getChunk(chunkPos).get(), new ExplosionSnapshot(chunkedHealables)));
     }
 
 

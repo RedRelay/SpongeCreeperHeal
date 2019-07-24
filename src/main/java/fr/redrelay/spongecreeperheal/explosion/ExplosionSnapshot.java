@@ -3,10 +3,7 @@ package fr.redrelay.spongecreeperheal.explosion;
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO : Must be serialisable, because it will be saved in world save (levelDB)
@@ -14,7 +11,7 @@ import java.util.stream.Collectors;
 public class ExplosionSnapshot implements Healable {
 
     //Null values are allowed, meaning chuck is not loaded
-    private final Map<Vector3i, Optional<? extends Healable>> chunkedExplosions = new HashMap<>();
+    private final Map<Vector3i, Optional<ChunkedExplosionSnapshot>> chunkedExplosions = new HashMap<>();
 
     public ExplosionSnapshot(Set<ChunkedExplosionSnapshot> chunkedExplosions){
         this.chunkedExplosions.putAll(chunkedExplosions.stream().collect(Collectors.toMap(ChunkedExplosionSnapshot::getChunkPosition, Optional::of)));
@@ -46,8 +43,14 @@ public class ExplosionSnapshot implements Healable {
     }
 
     @Override
-    public Map<Vector3i, Optional<? extends Healable>> splitByChunk() {
-        return this.chunkedExplosions;
+    public Set<Vector3i> getChunks() {
+        return Collections.unmodifiableSet(this.chunkedExplosions.keySet());
+    }
+
+    public Optional<ChunkedExplosionSnapshot> getChunkedExplosion(Vector3i chunkPos) {
+        final Optional<ChunkedExplosionSnapshot> chunkedExplosionSnapshot = chunkedExplosions.get(chunkPos);
+        if(chunkedExplosionSnapshot == null) return Optional.empty();
+        return chunkedExplosionSnapshot;
     }
 
 
