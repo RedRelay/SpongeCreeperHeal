@@ -50,6 +50,8 @@ public class ExplosionSnapshotFactory {
 
         final List<HealableBlock> healableBlocks = getSortedHealableBlocks(dependencyNodes);
 
+        //TODO : ScheduleService
+
         final Set<ChunkedExplosionSnapshot> chunkedExplosionSnapshots = createChunkedExplosionSnapshot(healableBlocks);
 
         return new ExplosionSnapshot(chunkedExplosionSnapshots);
@@ -83,8 +85,14 @@ public class ExplosionSnapshotFactory {
         return healables;
     }
 
-    private Set<ChunkedExplosionSnapshot> createChunkedExplosionSnapshot(List<HealableAtom> healables) {
-        return null;
+
+    private Set<ChunkedExplosionSnapshot> createChunkedExplosionSnapshot(List<? extends HealableAtom> healables) {
+        final Map<Vector3i, List<HealableAtom>> chunkedHealables = healables.stream()
+                .map(healable -> healable.getChunks().stream().collect(Collectors.toMap(Function.identity(), chunk -> healable)))
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+        return chunkedHealables.values().parallelStream().map(ChunkedExplosionSnapshot::new).collect(Collectors.toSet());
     }
 
     public static ExplosionSnapshotFactory getInstance() { return INSTANCE; }
