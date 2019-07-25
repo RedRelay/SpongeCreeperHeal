@@ -1,121 +1,53 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
-import com.flowpowered.math.vector.Vector3i;
-import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;
 import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
-import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.healable.Healable;
-import org.slf4j.Logger;
-import org.spongepowered.api.data.*;
-import org.spongepowered.api.data.persistence.AbstractDataBuilder;
-import org.spongepowered.api.data.persistence.InvalidDataException;
+import org.spongepowered.api.world.Chunk;
+import org.spongepowered.api.world.World;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * ChunkContainer contains a list of ExplosionSnapshot to be restored
  * It represents all explosions for a chunk
  */
-public class ChunkContainer implements DataSerializable {
+public class ChunkContainer {
 
-    private static class Keys {
-        final static DataQuery EXPLOSION = DataQuery.of("explosions");
+    private final ChunkContainerData data;
+    private final World world;
+    private final Chunk chunk;
+
+    public ChunkContainer(World world, Chunk chunk, ChunkContainerData data) {
+        this.world = world;
+        this.chunk = chunk;
+        this.data = data;
     }
 
-    private static Logger logger = SpongeCreeperHeal.getLogger();
-
-    private final List<ChunkedExplosionSnapshot> explosions = new LinkedList<>();
-    protected String worldName;
-    protected Vector3i chunkPos;
-
-    private ChunkContainer(Collection<? extends ChunkedExplosionSnapshot> explosions) {
-        if(explosions.isEmpty()) {
-            throw new RuntimeException(ChunkContainer.class.getSimpleName()+" must contains at least one explosion to heal");
-        }
-        this.explosions.addAll(explosions);
+    public ChunkContainer(World world, Chunk chunk, ChunkedExplosionSnapshot explosion) {
+       this(world, chunk, new ChunkContainerData(explosion));
     }
 
-    protected ChunkContainer(String worldName, Vector3i chunkPos, ChunkedExplosionSnapshot explosion) {
-        this.worldName = worldName;
-        this.chunkPos = chunkPos;
-        this.explosions.add(explosion);
+
+    public World getWorld() {
+        return world;
     }
 
-    /**
-     * Gets world name where the chunk is located
-     * @return
-     */
-    public String getWorldName() {
-        return worldName;
+    public Chunk getChunk() {
+        return chunk;
     }
 
-    /**
-     * Gets where is located the chunk
-     * @return
-     */
-    public Vector3i getChunkPos() {
-        return chunkPos;
+    public void addExplosion(ChunkedExplosionSnapshot explosion) {
+        this.data.getExplosions().add(explosion);
     }
 
-    /**
-     * Due to serialization and deserialization mechanism
-     * We cannot always use world name and chunk position while in constructor
-     * This method helps to know if ChunkContainer is correctly attached to a world
-     * @return
-     */
-    public boolean isLinkedToMinecraftCoord() {
-        return worldName != null && chunkPos != null;
+    public boolean isExplosionQueueEmpty() {
+        return data.getExplosions().isEmpty();
     }
 
-    public List<ChunkedExplosionSnapshot> getExplosions() {
-        return explosions;
-    }
 
     public void tick() {
-        explosions.forEach(Healable::decreaseRemainingTime);
-        explosions.removeAll(explosions.parallelStream().filter(e -> e.getHealableAtoms().isEmpty()).collect(Collectors.toList()));
-    }
-
-    @Override
-    public int getContentVersion() {
-        return 0;
-    }
-
-    @Override
-    public DataContainer toContainer() {
-        final DataContainer data = DataContainer.createNew();
-        data.set(Queries.CONTENT_VERSION, getContentVersion());
-        data.set(Keys.EXPLOSION, explosions);
-        return data;
-    }
-
-    public static class Builder {
-
-
-        public ChunkContainer build() {}
-    }
-
-    /**
-     * Used to provide ChunkContainer
-     */
-    public static class DataBuilder extends AbstractDataBuilder<ChunkContainer> {
-
-        public DataBuilder() {
-            super(ChunkContainer.class, 0);
-        }
-
-        @Override
-        protected Optional<ChunkContainer> buildContent(DataView container) throws InvalidDataException {
-            final Optional<List<ExplosionSnapshot>> opt = container.getSerializableList(Keys.EXPLOSION, ExplosionSnapshot.class);
-            if(!opt.isPresent()) {
-                logger.error("Found a {} data without explosions ... skipping.", ChunkContainer.class.getSimpleName());
-                return Optional.empty();
-            }
-            return Optional.of(new ChunkContainer(opt.get()));
-        }
+        data.getExplosions().forEach(Healable::decreaseRemainingTime);
+        data.getExplosions().removeAll(data.getExplosions().parallelStream().filter(e -> e.getHealableAtoms().isEmpty()).collect(Collectors.toList()));
     }
 }

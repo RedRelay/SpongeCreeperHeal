@@ -65,11 +65,11 @@ public class ChunkContainerRegistry {
     private void add(Chunk chunk, ChunkedExplosionSnapshot chunkedExplosionSnapshot) {
         final Optional<ChunkContainer> healableChunk = this.get(chunk.getUniqueId());
         if(healableChunk.isPresent()) {
-            logger.debug("Adding a new explosion to an existing {} {}", ChunkContainer.class.getSimpleName(), healableChunk.get().getChunkPos().toString());
-            healableChunk.get().getExplosions().add(chunkedExplosionSnapshot);
+            logger.debug("Adding a new explosion to an existing {} {}", ChunkContainer.class.getSimpleName(), chunk.getPosition());
+            healableChunk.get().addExplosion(chunkedExplosionSnapshot);
         }else {
             logger.debug("Adding a new explosion to a new {} {}", ChunkContainer.class.getSimpleName(), chunk.getPosition().toString());
-            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld().getName(), chunk.getPosition(), chunkedExplosionSnapshot));
+            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld(), chunk, chunkedExplosionSnapshot));
         }
     }
 
@@ -77,12 +77,8 @@ public class ChunkContainerRegistry {
      * Registers a ChunkContainer for the chunk UUID
      * @param id UUID of chunk where the ChunkContainer is
      * @param chunk
-     * @throws RuntimeException if ChunkContainer to register is not correctly attached to the world @see ChunkContainer#isLinkedToMinecraftCoord
      */
     protected void register(UUID id, ChunkContainer chunk) {
-        if(!chunk.isLinkedToMinecraftCoord()) {
-            throw new RuntimeException(ChunkContainer.class.getSimpleName()+" \""+id+"\" is not linked to Minecraft coordinates");
-        }
         logger.info("Registering {} {}", ChunkContainer.class.getSimpleName(), id);
         map.put(id, chunk);
     }
@@ -104,7 +100,7 @@ public class ChunkContainerRegistry {
     public void tick() {
         map.values().forEach(ChunkContainer::tick);
         map.entrySet().parallelStream()
-                .filter(entry -> entry.getValue().getExplosions().isEmpty())
+                .filter(entry -> entry.getValue().isExplosionQueueEmpty())
                 .collect(Collectors.toList())
                 .forEach(entry -> {
                     unregister(entry.getKey());
