@@ -1,8 +1,8 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
-import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.healable.explosion.ChunkedHealableExplosion;
+import fr.redrelay.spongecreeperheal.healable.explosion.HealableExplosion;
 import org.slf4j.Logger;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
@@ -35,24 +35,24 @@ public class ChunkContainerRegistry {
 
 
     /**
-     * Adds a new ExplosionSnapshot to a Chunk
+     * Adds a new HealableExplosion to a Chunk
      * If Chunk already contains a ChunkContainer it is added to it
      * Else it is created then registered
      * @param world
      * @param explosion
      */
-    public void add(World world, ExplosionSnapshot explosion) {
+    public void add(World world, HealableExplosion explosion) {
         explosion.getChunks().forEach(chunkPos -> {
             final Optional<Chunk> optChunk = world.getChunk(chunkPos);
-            final Optional<ChunkedExplosionSnapshot> optChunkedExplosionSnapshot = explosion.getChunkedExplosion(chunkPos);
+            final Optional<ChunkedHealableExplosion> optChunkedExplosionSnapshot = explosion.getChunkedExplosion(chunkPos);
 
             if(!optChunk.isPresent()) {
-                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : chunk seems not to be loaded", ChunkedExplosionSnapshot.class.getSimpleName(), chunkPos);
+                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : chunk seems not to be loaded", ChunkedHealableExplosion.class.getSimpleName(), chunkPos);
                 return;
             }
 
             if(!optChunkedExplosionSnapshot.isPresent()) {
-                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : {} is not loaded", ChunkedExplosionSnapshot.class.getSimpleName(), chunkPos, ChunkedExplosionSnapshot.class.getSimpleName());
+                SpongeCreeperHeal.getLogger().warn("Unable to register {} {} : {} is not loaded", ChunkedHealableExplosion.class.getSimpleName(), chunkPos, ChunkedHealableExplosion.class.getSimpleName());
                 return;
             }
 
@@ -62,14 +62,14 @@ public class ChunkContainerRegistry {
 
     }
 
-    private void add(Chunk chunk, ChunkedExplosionSnapshot chunkedExplosionSnapshot) {
+    private void add(Chunk chunk, ChunkedHealableExplosion chunkedHealableExplosion) {
         final Optional<ChunkContainer> healableChunk = this.get(chunk.getUniqueId());
         if(healableChunk.isPresent()) {
             logger.debug("Adding a new explosion to an existing {} {}", ChunkContainer.class.getSimpleName(), chunk.getPosition());
-            healableChunk.get().addExplosion(chunkedExplosionSnapshot);
+            healableChunk.get().addExplosion(chunkedHealableExplosion);
         }else {
             logger.debug("Adding a new explosion to a new {} {}", ChunkContainer.class.getSimpleName(), chunk.getPosition().toString());
-            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld(), chunk, chunkedExplosionSnapshot));
+            register(chunk.getUniqueId(), new ChunkContainer(chunk.getWorld(), chunk, chunkedHealableExplosion));
         }
     }
 

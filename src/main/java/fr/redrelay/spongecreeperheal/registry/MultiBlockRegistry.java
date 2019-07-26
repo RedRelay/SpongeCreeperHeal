@@ -5,7 +5,7 @@ import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockType;
 
-public class MultiBlockRegistry extends Registry<BlockType, BlockProvider<BlockSnapshotAccessor, HealableBlock>> {
+public class MultiBlockRegistry extends Registry<BlockType, BlockProvider<HealableBlock>> {
 
     private final static MultiBlockRegistry INSTANCE = new MultiBlockRegistry();
 

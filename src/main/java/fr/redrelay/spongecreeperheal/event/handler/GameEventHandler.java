@@ -1,4 +1,4 @@
-package fr.redrelay.spongecreeperheal.explosion;
+package fr.redrelay.spongecreeperheal.event.handler;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.adapter.MinecraftAdapter;

@@ -66,5 +66,5 @@ public abstract class ConnectedDirectionDependencyProvider extends AbstractDepen
      * @param dependencies
      * @return
      */
-    protected abstract DependencyModel<HealableBlock> merge(DependencyModel<Vector3i>... dependencies);
+    protected abstract DependencyModel<HealableBlock> merge(DependencyModel<HealableBlock>... dependencies);
 }

@@ -1,7 +1,8 @@
-package fr.redrelay.spongecreeperheal.explosion;
+package fr.redrelay.spongecreeperheal.event.handler;
 
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainerRegistry;
-import fr.redrelay.spongecreeperheal.factory.explosion.ExplosionSnapshotFactory;
+import fr.redrelay.spongecreeperheal.factory.explosion.HealableExplosionFactory;
+import fr.redrelay.spongecreeperheal.healable.explosion.HealableExplosion;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.world.ExplosionEvent;
 
@@ -15,8 +16,8 @@ public class ExplosionEventHandler {
 
     @Listener
     public void onDetonate(ExplosionEvent.Detonate e) {
-        final ExplosionSnapshot explosionSnapshot = ExplosionSnapshotFactory.getInstance().build(e);
-        ChunkContainerRegistry.getInstance().add(e.getTargetWorld(), explosionSnapshot);
+        final HealableExplosion healableExplosion = HealableExplosionFactory.getInstance().build(e);
+        ChunkContainerRegistry.getInstance().add(e.getTargetWorld(), healableExplosion);
     }
 
 

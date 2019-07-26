@@ -4,11 +4,11 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.DependencyIterator;
 import fr.redrelay.dependency.DependencyNode;
 import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;
-import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
-import fr.redrelay.spongecreeperheal.explosion.ExplosionSnapshot;
 import fr.redrelay.spongecreeperheal.factory.dependency.DependencyFactory;
 import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
+import fr.redrelay.spongecreeperheal.healable.explosion.ChunkedHealableExplosion;
+import fr.redrelay.spongecreeperheal.healable.explosion.HealableExplosion;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.LocatableSnapshot;
 import org.spongepowered.api.event.world.ExplosionEvent;
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
  * DependencyProvider registering
  * Sorting BlockSnapshot
  */
-public class ExplosionSnapshotFactory {
-    private static final ExplosionSnapshotFactory INSTANCE = new ExplosionSnapshotFactory();
+public class HealableExplosionFactory {
+    private static final HealableExplosionFactory INSTANCE = new HealableExplosionFactory();
 
-    private ExplosionSnapshotFactory() {}
+    private HealableExplosionFactory() {}
 
 
     /**
@@ -37,7 +37,7 @@ public class ExplosionSnapshotFactory {
      * @param e
      * @return
      */
-    public ExplosionSnapshot build(ExplosionEvent.Detonate e) {
+    public HealableExplosion build(ExplosionEvent.Detonate e) {
 
         final HealableBlockAccessor accessor = new HealableBlockAccessor(e);
 
@@ -49,9 +49,9 @@ public class ExplosionSnapshotFactory {
 
         //TODO : ScheduleService
 
-        final Set<ChunkedExplosionSnapshot> chunkedExplosionSnapshots = createChunkedExplosionSnapshot(healableBlocks);
+        final Set<ChunkedHealableExplosion> chunkedHealableExplosions = createChunkedExplosionSnapshot(healableBlocks);
 
-        return new ExplosionSnapshot(chunkedExplosionSnapshots);
+        return new HealableExplosion(chunkedHealableExplosions);
     }
 
     private void removeBlocks(Collection<? extends HealableBlock> healableBlocks) {
@@ -83,15 +83,15 @@ public class ExplosionSnapshotFactory {
     }
 
 
-    private Set<ChunkedExplosionSnapshot> createChunkedExplosionSnapshot(List<? extends HealableAtom> healables) {
+    private Set<ChunkedHealableExplosion> createChunkedExplosionSnapshot(List<? extends HealableAtom> healables) {
         final Map<Vector3i, List<HealableAtom>> chunkedHealables = healables.stream()
                 .map(healable -> healable.getChunks().stream().collect(Collectors.toMap(Function.identity(), chunk -> healable)))
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 
-        return chunkedHealables.values().parallelStream().map(ChunkedExplosionSnapshot::new).collect(Collectors.toSet());
+        return chunkedHealables.values().parallelStream().map(ChunkedHealableExplosion::new).collect(Collectors.toSet());
     }
 
-    public static ExplosionSnapshotFactory getInstance() { return INSTANCE; }
+    public static HealableExplosionFactory getInstance() { return INSTANCE; }
 
 }

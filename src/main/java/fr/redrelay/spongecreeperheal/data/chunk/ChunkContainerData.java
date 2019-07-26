@@ -1,7 +1,7 @@
 package fr.redrelay.spongecreeperheal.data.chunk;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
-import fr.redrelay.spongecreeperheal.explosion.ChunkedExplosionSnapshot;
+import fr.redrelay.spongecreeperheal.healable.explosion.ChunkedHealableExplosion;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
@@ -17,13 +17,13 @@ public class ChunkContainerData implements DataSerializable {
         final static DataQuery EXPLOSIONS = DataQuery.of("explosions");
     }
 
-    private final List<ChunkedExplosionSnapshot> explosions = new LinkedList<>();
+    private final List<ChunkedHealableExplosion> explosions = new LinkedList<>();
 
-    public ChunkContainerData(ChunkedExplosionSnapshot explosion) {
+    public ChunkContainerData(ChunkedHealableExplosion explosion) {
         this.explosions.add(explosion);
     }
 
-    private ChunkContainerData(Collection<? extends ChunkedExplosionSnapshot> explosions) {
+    private ChunkContainerData(Collection<? extends ChunkedHealableExplosion> explosions) {
         if(explosions.isEmpty()) {
             throw new RuntimeException(ChunkContainerData.class.getSimpleName()+" must contains at least one explosion to heal");
         }
@@ -43,7 +43,7 @@ public class ChunkContainerData implements DataSerializable {
         return data;
     }
 
-    public List<ChunkedExplosionSnapshot> getExplosions() {
+    public List<ChunkedHealableExplosion> getExplosions() {
         return explosions;
     }
 
@@ -55,7 +55,7 @@ public class ChunkContainerData implements DataSerializable {
 
         @Override
         protected Optional<ChunkContainerData> buildContent(DataView container) throws InvalidDataException {
-            final Optional<List<ChunkedExplosionSnapshot>> opt = container.getSerializableList(Keys.EXPLOSIONS, ChunkedExplosionSnapshot.class);
+            final Optional<List<ChunkedHealableExplosion>> opt = container.getSerializableList(Keys.EXPLOSIONS, ChunkedHealableExplosion.class);
             if(!opt.isPresent()) {
                 SpongeCreeperHeal.getLogger().error("Found a {} data without explosions ... skipping.", ChunkContainerData.class.getSimpleName());
                 return Optional.empty();
