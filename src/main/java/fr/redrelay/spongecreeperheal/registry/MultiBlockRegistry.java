@@ -1,6 +1,5 @@
 package fr.redrelay.spongecreeperheal.registry;
 
-import fr.redrelay.spongecreeperheal.accessor.impl.BlockSnapshotAccessor;
 import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockType;

@@ -89,7 +89,7 @@ public class HealableExplosionFactory {
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 
-        return chunkedHealables.values().parallelStream().map(ChunkedHealableExplosion::new).collect(Collectors.toSet());
+        return chunkedHealables.entrySet().parallelStream().map(entry -> new ChunkedHealableExplosion(entry.getKey(), entry.getValue())).collect(Collectors.toSet());
     }
 
     public static HealableExplosionFactory getInstance() { return INSTANCE; }

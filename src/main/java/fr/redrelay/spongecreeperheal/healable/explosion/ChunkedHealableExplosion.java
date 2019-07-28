@@ -2,6 +2,7 @@ package fr.redrelay.spongecreeperheal.healable.explosion;
 
 import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
+import fr.redrelay.spongecreeperheal.data.DelegatedDataSerializable;
 import fr.redrelay.spongecreeperheal.data.explosion.HealableExplosionData;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
 import fr.redrelay.spongecreeperheal.healable.Healable;
@@ -20,28 +21,13 @@ import java.util.stream.Collectors;
  * When Healable timer reach 0, it is restored and dropped from the list
  * Empty HealableExplosion must not be keep in memory to avoid leak
  */
-public class ChunkedHealableExplosion implements Healable, ChunkedHealable {
+public class ChunkedHealableExplosion extends DelegatedDataSerializable<HealableExplosionData> implements Healable, ChunkedHealable {
 
-    public static class EmptyChunkedHealableExplosionException extends RuntimeException {
-
-        private final Collection<? extends HealableAtom> healableAtoms;
-
-        private EmptyChunkedHealableExplosionException(Vector3i chunkPos, Collection<? extends HealableAtom> healableAtoms) {
-            super("Unable to create an "+ ChunkedHealableExplosion.class.getSimpleName()+" without at least one "+HealableAtom.class.getSimpleName()+" located in its chunk "+chunkPos);
-            this.healableAtoms = healableAtoms;
-        }
-
-        public Collection<? extends HealableAtom> getEntries() {
-            return Collections.unmodifiableCollection(healableAtoms);
-        }
-    }
-
-    private final HealableExplosionData data;
     private final Vector3i chunkPos;
 
     public ChunkedHealableExplosion(Vector3i chunkPos, HealableExplosionData data) {
+        super(data);
         this.chunkPos = chunkPos;
-        this.data = data;
     }
 
     public ChunkedHealableExplosion(Vector3i chunkPos, Collection<? extends HealableAtom> healableAtoms) throws HealableExplosionData.EmptyHealableExplosionDataException {
@@ -68,15 +54,6 @@ public class ChunkedHealableExplosion implements Healable, ChunkedHealable {
     public void setRemainingTime(int remainingTime) {
         //TODO
         throw new RuntimeException("Not implemented yet");
-    }
-
-    @Override
-    public void decreaseRemainingTime() {
-        final LinkedList<HealableAtom> healableAtoms = data.getHealableAtoms();
-        healableAtoms.getFirst().decreaseRemainingTime();
-        if(healableAtoms.getFirst().getRemainingTime() == 0) {
-            healableAtoms.removeFirst().restore();
-        }
     }
 
     @Override

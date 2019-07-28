@@ -1,6 +1,5 @@
 package fr.redrelay.spongecreeperheal.dependency.rule.impl;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.dependency.model.OrDependencyModel;
 import fr.redrelay.spongecreeperheal.dependency.provider.ConnectedDirectionDependencyProvider;

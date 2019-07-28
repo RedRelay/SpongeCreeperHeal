@@ -1,11 +1,13 @@
 package fr.redrelay.spongecreeperheal;
 
 import com.google.inject.Inject;
-import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
 import fr.redrelay.spongecreeperheal.chunk.ChunkEventHandler;
-import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
+import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;
+import fr.redrelay.spongecreeperheal.data.explosion.HealableExplosionData;
 import fr.redrelay.spongecreeperheal.event.handler.ExplosionEventHandler;
 import fr.redrelay.spongecreeperheal.event.handler.GameEventHandler;
+import fr.redrelay.spongecreeperheal.healable.AbstractHealable;
+import fr.redrelay.spongecreeperheal.healable.atom.block.impl.SimpleHealableBlock;
 import fr.redrelay.spongecreeperheal.storage.world.WorldStoragesEventListeners;
 import fr.redrelay.spongecreeperheal.task.HealTask;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -49,9 +51,9 @@ public class SpongeCreeperHeal {
     public void onGamePreInit(GamePreInitializationEvent e) {
         final DataManager dataManager = Sponge.getDataManager();
 
-        dataManager.registerBuilder(ChunkContainer.class, new ChunkContainer.DataBuilder());
-        //dataManager.registerBuilder(HealableExplosion.class, new HealableExplosion.DataBuilder());
-        //dataManager.registerBuilder(ChunkedHealable.class, new HealableBlock.ChunkedHealableDataBuilder());
+        dataManager.registerBuilder(ChunkContainerData.class, new ChunkContainerData.DataBuilder());
+        dataManager.registerBuilder(HealableExplosionData.class, new HealableExplosionData.DataBuilder());
+        dataManager.registerBuilder(AbstractHealable.class, new AbstractHealable.DataBuilder());
         dataManager.registerBuilder(SimpleHealableBlock.class, new SimpleHealableBlock.DataBuilder());
     }
 

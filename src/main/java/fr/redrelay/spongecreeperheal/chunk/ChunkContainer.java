@@ -1,10 +1,9 @@
 package fr.redrelay.spongecreeperheal.chunk;
 
+import fr.redrelay.spongecreeperheal.data.DelegatedDataSerializable;
 import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;
 import fr.redrelay.spongecreeperheal.healable.Healable;
 import fr.redrelay.spongecreeperheal.healable.explosion.ChunkedHealableExplosion;
-import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 
@@ -14,16 +13,15 @@ import java.util.stream.Collectors;
  * ChunkContainer contains a list of HealableExplosion to be restored
  * It represents all explosions for a chunk
  */
-public class ChunkContainer implements DataSerializable {
+public class ChunkContainer extends DelegatedDataSerializable<ChunkContainerData> {
 
-    private final ChunkContainerData data;
     private final World world;
     private final Chunk chunk;
 
     public ChunkContainer(World world, Chunk chunk, ChunkContainerData data) {
+        super(data);
         this.world = world;
         this.chunk = chunk;
-        this.data = data;
     }
 
     public ChunkContainer(World world, Chunk chunk, ChunkedHealableExplosion explosion) {
@@ -51,15 +49,5 @@ public class ChunkContainer implements DataSerializable {
     public void tick() {
         data.getExplosions().forEach(Healable::decreaseRemainingTime);
         data.getExplosions().removeAll(data.getExplosions().parallelStream().filter(ChunkedHealableExplosion::isHealableQueueEmpty).collect(Collectors.toList()));
-    }
-
-    @Override
-    public int getContentVersion() {
-        return data.getContentVersion();
-    }
-
-    @Override
-    public DataContainer toContainer() {
-        return data.toContainer();
     }
 }

@@ -1,6 +1,5 @@
 package fr.redrelay.spongecreeperheal.storage.world;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
 import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;

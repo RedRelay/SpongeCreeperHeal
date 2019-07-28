@@ -21,9 +21,7 @@ public class ChunkEventHandler {
     @Listener
     public void onChunkLoad(LoadChunkEvent e) {
         WorldStorages.getInstance().get(e.getTargetChunk().getWorld().getName()).ifPresent(worldStorage -> {
-            worldStorage.get(e.getTargetChunk().getPosition()).ifPresent(healableChunk -> {
-                healableChunk.worldName = e.getTargetChunk().getWorld().getName();
-                healableChunk.chunkPos = e.getTargetChunk().getPosition();
+            worldStorage.get(e.getTargetChunk()).ifPresent(healableChunk -> {
                 ChunkContainerRegistry.getInstance().register(e.getTargetChunk().getUniqueId(), healableChunk);
             });
         });
@@ -53,11 +51,12 @@ public class ChunkEventHandler {
     }
 
     /**
+     * TODO : Keep empty ChunkContainer in memory, flush them only when saving
      * When a ChunkContainer is restored, remove it from the database
      * @param chunk
      */
     public void onHealableChunkDone(ChunkContainer chunk) {
-        WorldStorages.getInstance().get(chunk.getWorldName()).ifPresent(worldStorage -> {
+        WorldStorages.getInstance().get(chunk.getWorld().getName()).ifPresent(worldStorage -> {
             worldStorage.delete(chunk);
         });
     }
@@ -67,7 +66,7 @@ public class ChunkEventHandler {
      * @param chunk
      */
     private void saveChunk(ChunkContainer chunk) {
-        WorldStorages.getInstance().get(chunk.getWorldName()).ifPresent(worldStorage -> {
+        WorldStorages.getInstance().get(chunk.getWorld().getName()).ifPresent(worldStorage -> {
             worldStorage.save(chunk);
         });
     }

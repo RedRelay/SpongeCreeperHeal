@@ -1,6 +1,5 @@
 package fr.redrelay.spongecreeperheal.dependency.provider;
 
-import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.dependency.model.BasicDependencyModel;
 import fr.redrelay.dependency.model.DependencyModel;
 import fr.redrelay.spongecreeperheal.accessor.impl.HealableBlockAccessor;

@@ -7,7 +7,6 @@ import java.util.Set;
 
 public interface ChunkedHealable extends Healable {
     Vector3i getChunkPosition();
-
     default Set<Vector3i> getChunks() {
         return Collections.singleton(getChunkPosition());
     }

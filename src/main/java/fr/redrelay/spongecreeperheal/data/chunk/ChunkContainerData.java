@@ -1,6 +1,5 @@
 package fr.redrelay.spongecreeperheal.data.chunk;
 
-import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.healable.explosion.ChunkedHealableExplosion;
 import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
@@ -13,6 +12,12 @@ import java.util.Optional;
 
 public class ChunkContainerData implements DataSerializable {
 
+    private static class EmptyChunkContainerData extends RuntimeException {
+        public EmptyChunkContainerData() {
+            super(Keys.EXPLOSIONS+" is empty, "+ChunkContainerData.class.getSimpleName()+" must contains at least one explosion to heal");
+        }
+    }
+
     private static class Keys {
         final static DataQuery EXPLOSIONS = DataQuery.of("explosions");
     }
@@ -23,9 +28,9 @@ public class ChunkContainerData implements DataSerializable {
         this.explosions.add(explosion);
     }
 
-    private ChunkContainerData(Collection<? extends ChunkedHealableExplosion> explosions) {
+    private ChunkContainerData(Collection<? extends ChunkedHealableExplosion> explosions) throws EmptyChunkContainerData{
         if(explosions.isEmpty()) {
-            throw new RuntimeException(ChunkContainerData.class.getSimpleName()+" must contains at least one explosion to heal");
+            throw new EmptyChunkContainerData();
         }
         this.explosions.addAll(explosions);
     }
@@ -57,10 +62,13 @@ public class ChunkContainerData implements DataSerializable {
         protected Optional<ChunkContainerData> buildContent(DataView container) throws InvalidDataException {
             final Optional<List<ChunkedHealableExplosion>> opt = container.getSerializableList(Keys.EXPLOSIONS, ChunkedHealableExplosion.class);
             if(!opt.isPresent()) {
-                SpongeCreeperHeal.getLogger().error("Found a {} data without explosions ... skipping.", ChunkContainerData.class.getSimpleName());
-                return Optional.empty();
+                throw new InvalidDataException("Missing "+Keys.EXPLOSIONS);
             }
-            return Optional.of(new ChunkContainerData(opt.get()));
+            try {
+                return Optional.of(new ChunkContainerData(opt.get()));
+            }catch(EmptyChunkContainerData e) {
+                throw new InvalidDataException(e);
+            }
         }
 
     }

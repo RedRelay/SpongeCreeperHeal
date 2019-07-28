@@ -56,8 +56,8 @@ public class HealableExplosionData implements DataSerializable {
 
     public static class DataBuilder extends AbstractDataBuilder<HealableExplosionData> {
 
-        protected DataBuilder(int supportedVersion) {
-            super(HealableExplosionData.class, supportedVersion);
+        public DataBuilder() {
+            super(HealableExplosionData.class, 0);
         }
 
         @Override

@@ -19,7 +19,7 @@ public abstract class HealableAtom extends AbstractHealable {
 
     protected HealableAtom(DataView data) throws InvalidDataException {
         final int remainingTime = data.getInt(Keys.REMAINING_TIME).orElseGet(() -> {
-            SpongeCreeperHeal.getLogger().error("Missing \"{}\" data : set default to {}", Keys.REMAINING_TIME.toString(), 1);
+            SpongeCreeperHeal.getLogger().error("Missing \"{}\" : set default to {}", Keys.REMAINING_TIME.toString(), 1);
             return 1;
         });
 
@@ -42,15 +42,6 @@ public abstract class HealableAtom extends AbstractHealable {
             throw new IllegalArgumentException("Unable to set a remaining time < 0 ... was "+remainingTime);
         }
         this.remainingTime = remainingTime;
-    }
-
-    @Override
-    public void decreaseRemainingTime() {
-        if(this.remainingTime <= 0) {
-            SpongeCreeperHeal.getLogger().error("Cannot decrease remaining time because it is already 0 ... skipping");
-            return;
-        }
-        this.remainingTime--;
     }
 
     @Override

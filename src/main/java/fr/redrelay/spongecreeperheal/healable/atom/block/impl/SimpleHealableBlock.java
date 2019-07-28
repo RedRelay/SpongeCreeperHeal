@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector3i;
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.factory.healable.block.BlockProvider;
 import fr.redrelay.spongecreeperheal.healable.ChunkedHealable;
+import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 import fr.redrelay.spongecreeperheal.healable.atom.block.HealableBlock;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.DataContainer;
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-public class SimpleHealableBlock extends HealableBlock implements ChunkedHealable {
+public class SimpleHealableBlock extends HealableAtom implements HealableBlock, ChunkedHealable {
 
     private static class Keys {
         final static DataQuery BLOCK_SNAPSHOT = DataQuery.of("blockSnapshot");
@@ -59,12 +60,7 @@ public class SimpleHealableBlock extends HealableBlock implements ChunkedHealabl
 
     @Override
     public Vector3i getChunkPosition() {
-        if(!this.blockSnapshot.getLocation().isPresent()) {
-            final String errorMsg = "No location defined for a " + SimpleHealableBlock.class.getSimpleName();
-            SpongeCreeperHeal.getLogger().error(errorMsg);
-            throw new RuntimeException(errorMsg);
-        }
-        return this.blockSnapshot.getLocation().get().getChunkPosition();
+        return this.blockSnapshot.getPosition();
     }
     @Override
     public Map<Vector3i, BlockSnapshot> getBlockSnapshots() {
