@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal.storage.world;
 
 import fr.redrelay.spongecreeperheal.SpongeCreeperHeal;
 import fr.redrelay.spongecreeperheal.chunk.ChunkContainer;
-import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;
+import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerBuilder;
 import fr.redrelay.spongecreeperheal.storage.LevelDB;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -31,7 +31,7 @@ public class WorldStorage {
         if(!opt.isPresent()) {
             return Optional.empty();
         }
-        final Optional<ChunkContainerData> data = Sponge.getDataManager().deserialize(ChunkContainerData.class, opt.get());
+        final Optional<ChunkContainerBuilder> data = Sponge.getDataManager().deserialize(ChunkContainerBuilder.class, opt.get());
         if(!data.isPresent()) {
             return Optional.empty();
         }

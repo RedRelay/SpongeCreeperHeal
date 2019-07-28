@@ -46,9 +46,7 @@ public class LevelDB {
     public Optional<DataContainer> get(Vector3i chunkPos) {
         try {
             final byte[] data = db.get(bytes(chunkPos));
-            if(data != null) {
-                return Optional.ofNullable(asDataContainer(data));
-            }
+            return Optional.of(asDataContainer(data));
         } catch (IOException e) {
             logger.error("Unable to load {} of chunk {} : {}",DataContainer.class.getSimpleName(), chunkPos.toString(), e);
         }

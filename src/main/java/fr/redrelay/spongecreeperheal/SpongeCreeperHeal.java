@@ -2,7 +2,7 @@ package fr.redrelay.spongecreeperheal;
 
 import com.google.inject.Inject;
 import fr.redrelay.spongecreeperheal.chunk.ChunkEventHandler;
-import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerData;
+import fr.redrelay.spongecreeperheal.data.chunk.ChunkContainerBuilder;
 import fr.redrelay.spongecreeperheal.data.explosion.HealableExplosionData;
 import fr.redrelay.spongecreeperheal.event.handler.ExplosionEventHandler;
 import fr.redrelay.spongecreeperheal.event.handler.GameEventHandler;
@@ -51,7 +51,7 @@ public class SpongeCreeperHeal {
     public void onGamePreInit(GamePreInitializationEvent e) {
         final DataManager dataManager = Sponge.getDataManager();
 
-        dataManager.registerBuilder(ChunkContainerData.class, new ChunkContainerData.DataBuilder());
+        dataManager.registerBuilder(ChunkContainerBuilder.class, new ChunkContainerBuilder.DataBuilder());
         dataManager.registerBuilder(HealableExplosionData.class, new HealableExplosionData.DataBuilder());
         dataManager.registerBuilder(AbstractHealable.class, new AbstractHealable.DataBuilder());
         dataManager.registerBuilder(SimpleHealableBlock.class, new SimpleHealableBlock.DataBuilder());

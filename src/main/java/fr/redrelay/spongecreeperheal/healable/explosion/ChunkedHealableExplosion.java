@@ -9,7 +9,6 @@ import fr.redrelay.spongecreeperheal.healable.Healable;
 import fr.redrelay.spongecreeperheal.healable.atom.HealableAtom;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
