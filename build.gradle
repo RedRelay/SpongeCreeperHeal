@@ -1,6 +1,20 @@
+buildscript {
+    repositories {
+        maven {
+            name = 'forge'
+            url = 'https://files.minecraftforge.net/maven'
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'java'
     id 'org.spongepowered.plugin' version '0.9.0'
+    id 'net.minecrell.vanillagradle.server' version '2.2-6'
 }
 
 group 'fr.redrelay.spongecreeperheal'
@@ -10,6 +24,11 @@ compileJava.options.encoding = 'UTF-8'
 
 sourceCompatibility = 1.8
 
+minecraft {
+    version = '1.12.2'
+    mappings = 'snapshot_20180814'
+}
+
 repositories {
     mavenCentral()
 }
@@ -17,4 +36,20 @@ repositories {
 dependencies {
     compile 'org.spongepowered:spongeapi:7.1.0'
     compile 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
+}
+
+// Testing dependencies
+test {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full' // Always print full stack trace if something goes wrong in the unit tests
+        showStandardStreams = true
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testCompile 'org.mockito:mockito-core:3.3.3'
+    testRuntimeOnly 'org.slf4j:slf4j-nop:1.7.9'
 }

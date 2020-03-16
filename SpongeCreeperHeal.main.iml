@@ -11,6 +11,12 @@
       </configuration>
     </facet>
   </component>
+  <component name="McpModuleSettings">
+    <option name="mappingFile" value="C:\Users\adupo\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20180814\1.12.2\srgs\mcp-srg.srg" />
+    <option name="mcpVersion" value="snapshot_20180814" />
+    <option name="minecraftVersion" value="1.12.2" />
+    <option name="srgType" value="SRG" />
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/src/main">
