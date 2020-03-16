@@ -15,7 +15,6 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.event.EventManager;
@@ -50,7 +49,7 @@ public class SpongeCreeperHeal {
 
     @Listener
     public void onGamePreInit(GamePreInitializationEvent e) {
-        final DataManager dataManager = Sponge.getDataManager();
+        final DataManager dataManager = org.spongepowered.api.Sponge.getDataManager();
 
         dataManager.registerBuilder(ChunkContainer.class, new ChunkContainer.Builder());
         dataManager.registerBuilder(ExplosionSnapshot.class, new ExplosionSnapshot.Builder());
@@ -60,14 +59,15 @@ public class SpongeCreeperHeal {
 
     @Listener
     public void onGameInit(GameInitializationEvent e) {
-        final EventManager eventManager = Sponge.getEventManager();
+        final EventManager eventManager = getEventManager();
 
         eventManager.registerListeners(this, GameEventHandler.getInstance());
 
         eventManager.registerListeners(this, ChunkEventHandler.getInstance());
         eventManager.registerListeners(this, WorldStoragesEventListeners.getInstance());
         eventManager.registerListeners(this, HealTask.getInstance());
-        eventManager.registerListeners(this, ExplosionEventHandler.getInstance());
+
+        eventManager.registerListeners(this, new ExplosionEventHandler());
     }
 
 
@@ -104,4 +104,7 @@ public class SpongeCreeperHeal {
         return Optional.empty();
     }
 
+    public EventManager getEventManager() {
+        return org.spongepowered.api.Sponge.getEventManager();
+    }
 }

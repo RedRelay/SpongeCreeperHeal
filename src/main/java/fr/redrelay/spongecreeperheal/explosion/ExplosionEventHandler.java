@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
  * Handle explosion
  */
 public class ExplosionEventHandler {
-    private static final ExplosionEventHandler INSTANCE = new ExplosionEventHandler();
-
-    private ExplosionEventHandler() {}
 
     @Listener
     public void onDetonate(ExplosionEvent.Detonate e) {
@@ -50,7 +47,4 @@ public class ExplosionEventHandler {
         //Update block
         blocks.forEach(block -> block.getLocation().ifPresent(world -> world.setBlockType(BlockTypes.AIR)));
     }
-
-
-    public static ExplosionEventHandler getInstance() { return INSTANCE; }
 }
