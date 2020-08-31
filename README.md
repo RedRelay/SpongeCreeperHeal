@@ -7,14 +7,15 @@ SpongeCreeperHeal is not only a porting of [ForgeCreeperHeal](https://github.com
 It is a complete code refactoring to make it easier to understand and to contribute.
 SpongeCreeperHeal started 18th july 2018, at the same date of Minecraft 1.13 !
 
-With a lot of new skill in develpment, I will put the best of I could in this plugin.
+With a lot of new skill in development, I will put the best of I could in this plugin.
 
-I don't use Java since 2017, I'm now a professionnal JavaScript devlopper for a leader e-commerce compagny in France.
-As Minecraft is java coded, I will use Java with some functionnal programming I've learned from JS. E.g -> Lambda !
+# Development is currently PAUSED
 
-Damn I've done an other break since july 2018 and we are now in June 2019 .. and Minecraft 1.14 was released.
-I agree I am not reliable. Sorry. In fact I don't play Minecraft since 2015 and sometimes I want to play again.
-Theses times mean I code. Othertime I am a bit bored by Minecraft & Plugin developpement.
+Sponge offer me the possibility to make a plugin like bukkit does before license issues.
+SpongeCreeperHeal is a server side mod, so I would like vanilla version could join a server with my mod.
+Sponge can handle it. Moreover Sponge promise one more thing : "Most plugins developed with the Sponge API should work across several different versions of Minecraft without needing to be updated.". That's quite true, because by using Sponge we have to use Sponge API instead of Minecraft API. Sponge API then call Minecraft API itself meaning all change to Minecraft API accross versions are done into Sponge API. However for being meaningfull Sponge API have to be updated when Minecraft API evolve.
+Since I wrote theses lines, Minecraft is 1.16 and Sponge API is still 1.12 ... 3 years after Minecraft 1.12 was released ...
+I have paused the SpongeCreeperHeal development because who still play 1.12 ? 
 
 ## When the code and the Sponge plugin will be available ?
 
